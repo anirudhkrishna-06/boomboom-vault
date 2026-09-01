@@ -1,0 +1,662 @@
+[
+  {
+    "chit_code": "BB101",
+    "seed": 890597845,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB101|COLOR:RED=7|BLUE=3|GREEN=9|YELLOW=1|SHAPE:CIRCLE=2|TRIANGLE=5|SQUARE=8|DIAMOND=4|COLSEQ:RED-BLUE-GREEN-YELLOW|SHAPESEQ:CIRCLE-TRIANGLE-SQUARE-DIAMOND|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB101.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB101|COLOR:RED=7|BLUE=3|GREEN=9|YELLOW=1|SHAPE:CIRCLE=2|TRIANGLE=5|SQUARE=8|DIAMOND=4|COLSEQ:RED-BLUE-GREEN-YELLOW|SHAPESEQ:CIRCLE-TRIANGLE-SQUARE-DIAMOND|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB102",
+    "seed": 70469527,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB102|COLOR:RED=4|BLUE=8|GREEN=2|YELLOW=6|SHAPE:CIRCLE=7|TRIANGLE=3|SQUARE=9|DIAMOND=1|COLSEQ:YELLOW-GREEN-BLUE-RED|SHAPESEQ:DIAMOND-SQUARE-TRIANGLE-CIRCLE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB102.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      0
+    ],
+    "hsv_v": [
+      0,
+      0
+    ],
+    "recovery_found": false,
+    "decoded_payload": "",
+    "status": "FAIL"
+  },
+  {
+    "chit_code": "BB103",
+    "seed": 1130618168,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB103|COLOR:RED=9|BLUE=1|GREEN=6|YELLOW=4|SHAPE:CIRCLE=3|TRIANGLE=8|SQUARE=2|DIAMOND=7|COLSEQ:GREEN-RED-YELLOW-BLUE|SHAPESEQ:SQUARE-CIRCLE-DIAMOND-TRIANGLE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB103.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB103|COLOR:RED=9|BLUE=1|GREEN=6|YELLOW=4|SHAPE:CIRCLE=3|TRIANGLE=8|SQUARE=2|DIAMOND=7|COLSEQ:GREEN-RED-YELLOW-BLUE|SHAPESEQ:SQUARE-CIRCLE-DIAMOND-TRIANGLE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB104",
+    "seed": 1518221533,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB104|COLOR:RED=2|BLUE=6|GREEN=8|YELLOW=5|SHAPE:CIRCLE=9|TRIANGLE=4|SQUARE=1|DIAMOND=7|COLSEQ:BLUE-YELLOW-RED-GREEN|SHAPESEQ:TRIANGLE-DIAMOND-CIRCLE-SQUARE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB104.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB104|COLOR:RED=2|BLUE=6|GREEN=8|YELLOW=5|SHAPE:CIRCLE=9|TRIANGLE=4|SQUARE=1|DIAMOND=7|COLSEQ:BLUE-YELLOW-RED-GREEN|SHAPESEQ:TRIANGLE-DIAMOND-CIRCLE-SQUARE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB105",
+    "seed": 1059619440,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB105|COLOR:RED=5|BLUE=2|GREEN=7|YELLOW=9|SHAPE:CIRCLE=6|TRIANGLE=1|SQUARE=4|DIAMOND=8|COLSEQ:YELLOW-BLUE-GREEN-RED|SHAPESEQ:CIRCLE-SQUARE-DIAMOND-TRIANGLE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB105.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB105|COLOR:RED=5|BLUE=2|GREEN=7|YELLOW=9|SHAPE:CIRCLE=6|TRIANGLE=1|SQUARE=4|DIAMOND=8|COLSEQ:YELLOW-BLUE-GREEN-RED|SHAPESEQ:CIRCLE-SQUARE-DIAMOND-TRIANGLE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB106",
+    "seed": 1673625487,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB106|COLOR:RED=8|BLUE=5|GREEN=3|YELLOW=7|SHAPE:CIRCLE=1|TRIANGLE=9|SQUARE=6|DIAMOND=2|COLSEQ:RED-GREEN-BLUE-YELLOW|SHAPESEQ:DIAMOND-CIRCLE-SQUARE-TRIANGLE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB106.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      115
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB106|COLOR:RED=8|BLUE=5|GREEN=3|YELLOW=7|SHAPE:CIRCLE=1|TRIANGLE=9|SQUARE=6|DIAMOND=2|COLSEQ:RED-GREEN-BLUE-YELLOW|SHAPESEQ:DIAMOND-CIRCLE-SQUARE-TRIANGLE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB107",
+    "seed": 1201712830,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB107|COLOR:RED=3|BLUE=9|GREEN=5|YELLOW=2|SHAPE:CIRCLE=8|TRIANGLE=6|SQUARE=3|DIAMOND=1|COLSEQ:BLUE-RED-YELLOW-GREEN|SHAPESEQ:TRIANGLE-SQUARE-CIRCLE-DIAMOND|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB107.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB107|COLOR:RED=3|BLUE=9|GREEN=5|YELLOW=2|SHAPE:CIRCLE=8|TRIANGLE=6|SQUARE=3|DIAMOND=1|COLSEQ:BLUE-RED-YELLOW-GREEN|SHAPESEQ:TRIANGLE-SQUARE-CIRCLE-DIAMOND|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB108",
+    "seed": 900957696,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB108|COLOR:RED=6|BLUE=4|GREEN=1|YELLOW=8|SHAPE:CIRCLE=5|TRIANGLE=2|SQUARE=7|DIAMOND=9|COLSEQ:GREEN-YELLOW-BLUE-RED|SHAPESEQ:SQUARE-DIAMOND-TRIANGLE-CIRCLE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB108.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB108|COLOR:RED=6|BLUE=4|GREEN=1|YELLOW=8|SHAPE:CIRCLE=5|TRIANGLE=2|SQUARE=7|DIAMOND=9|COLSEQ:GREEN-YELLOW-BLUE-RED|SHAPESEQ:SQUARE-DIAMOND-TRIANGLE-CIRCLE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB109",
+    "seed": 131462105,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB109|COLOR:RED=1|BLUE=7|GREEN=4|YELLOW=3|SHAPE:CIRCLE=9|TRIANGLE=5|SQUARE=2|DIAMOND=6|COLSEQ:RED-YELLOW-GREEN-BLUE|SHAPESEQ:CIRCLE-TRIANGLE-DIAMOND-SQUARE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB109.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB109|COLOR:RED=1|BLUE=7|GREEN=4|YELLOW=3|SHAPE:CIRCLE=9|TRIANGLE=5|SQUARE=2|DIAMOND=6|COLSEQ:RED-YELLOW-GREEN-BLUE|SHAPESEQ:CIRCLE-TRIANGLE-DIAMOND-SQUARE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB110",
+    "seed": 509016171,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB110|COLOR:RED=7|BLUE=2|GREEN=9|YELLOW=5|SHAPE:CIRCLE=4|TRIANGLE=8|SQUARE=1|DIAMOND=6|COLSEQ:BLUE-GREEN-YELLOW-RED|SHAPESEQ:DIAMOND-CIRCLE-SQUARE-TRIANGLE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB110.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB110|COLOR:RED=7|BLUE=2|GREEN=9|YELLOW=5|SHAPE:CIRCLE=4|TRIANGLE=8|SQUARE=1|DIAMOND=6|COLSEQ:BLUE-GREEN-YELLOW-RED|SHAPESEQ:DIAMOND-CIRCLE-SQUARE-TRIANGLE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB111",
+    "seed": 945283310,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB111|COLOR:RED=4|BLUE=6|GREEN=2|YELLOW=9|SHAPE:CIRCLE=3|TRIANGLE=7|SQUARE=5|DIAMOND=1|COLSEQ:YELLOW-RED-BLUE-GREEN|SHAPESEQ:SQUARE-TRIANGLE-DIAMOND-CIRCLE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB111.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB111|COLOR:RED=4|BLUE=6|GREEN=2|YELLOW=9|SHAPE:CIRCLE=3|TRIANGLE=7|SQUARE=5|DIAMOND=1|COLSEQ:YELLOW-RED-BLUE-GREEN|SHAPESEQ:SQUARE-TRIANGLE-DIAMOND-CIRCLE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB112",
+    "seed": 1801767714,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB112|COLOR:RED=9|BLUE=3|GREEN=7|YELLOW=1|SHAPE:CIRCLE=8|TRIANGLE=2|SQUARE=6|DIAMOND=4|COLSEQ:GREEN-BLUE-RED-YELLOW|SHAPESEQ:TRIANGLE-CIRCLE-SQUARE-DIAMOND|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB112.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      161
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB112|COLOR:RED=9|BLUE=3|GREEN=7|YELLOW=1|SHAPE:CIRCLE=8|TRIANGLE=2|SQUARE=6|DIAMOND=4|COLSEQ:GREEN-BLUE-RED-YELLOW|SHAPESEQ:TRIANGLE-CIRCLE-SQUARE-DIAMOND|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB113",
+    "seed": 1902209065,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB113|COLOR:RED=2|BLUE=8|GREEN=5|YELLOW=6|SHAPE:CIRCLE=1|TRIANGLE=4|SQUARE=9|DIAMOND=3|COLSEQ:BLUE-YELLOW-GREEN-RED|SHAPESEQ:DIAMOND-SQUARE-CIRCLE-TRIANGLE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB113.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      115
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB113|COLOR:RED=2|BLUE=8|GREEN=5|YELLOW=6|SHAPE:CIRCLE=1|TRIANGLE=4|SQUARE=9|DIAMOND=3|COLSEQ:BLUE-YELLOW-GREEN-RED|SHAPESEQ:DIAMOND-SQUARE-CIRCLE-TRIANGLE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB114",
+    "seed": 449067532,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB114|COLOR:RED=5|BLUE=1|GREEN=8|YELLOW=3|SHAPE:CIRCLE=7|TRIANGLE=6|SQUARE=2|DIAMOND=9|COLSEQ:RED-GREEN-YELLOW-BLUE|SHAPESEQ:CIRCLE-DIAMOND-TRIANGLE-SQUARE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB114.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB114|COLOR:RED=5|BLUE=1|GREEN=8|YELLOW=3|SHAPE:CIRCLE=7|TRIANGLE=6|SQUARE=2|DIAMOND=9|COLSEQ:RED-GREEN-YELLOW-BLUE|SHAPESEQ:CIRCLE-DIAMOND-TRIANGLE-SQUARE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB115",
+    "seed": 1338064984,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB115|COLOR:RED=8|BLUE=4|GREEN=6|YELLOW=2|SHAPE:CIRCLE=5|TRIANGLE=3|SQUARE=1|DIAMOND=7|COLSEQ:YELLOW-BLUE-RED-GREEN|SHAPESEQ:SQUARE-CIRCLE-DIAMOND-TRIANGLE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB115.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB115|COLOR:RED=8|BLUE=4|GREEN=6|YELLOW=2|SHAPE:CIRCLE=5|TRIANGLE=3|SQUARE=1|DIAMOND=7|COLSEQ:YELLOW-BLUE-RED-GREEN|SHAPESEQ:SQUARE-CIRCLE-DIAMOND-TRIANGLE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB116",
+    "seed": 1950396767,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB116|COLOR:RED=3|BLUE=7|GREEN=1|YELLOW=9|SHAPE:CIRCLE=2|TRIANGLE=8|SQUARE=4|DIAMOND=6|COLSEQ:BLUE-GREEN-RED-YELLOW|SHAPESEQ:TRIANGLE-DIAMOND-SQUARE-CIRCLE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB116.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      115
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB116|COLOR:RED=3|BLUE=7|GREEN=1|YELLOW=9|SHAPE:CIRCLE=2|TRIANGLE=8|SQUARE=4|DIAMOND=6|COLSEQ:BLUE-GREEN-RED-YELLOW|SHAPESEQ:TRIANGLE-DIAMOND-SQUARE-CIRCLE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB117",
+    "seed": 905709951,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB117|COLOR:RED=6|BLUE=9|GREEN=4|YELLOW=5|SHAPE:CIRCLE=8|TRIANGLE=1|SQUARE=7|DIAMOND=3|COLSEQ:RED-YELLOW-BLUE-GREEN|SHAPESEQ:CIRCLE-SQUARE-TRIANGLE-DIAMOND|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB117.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB117|COLOR:RED=6|BLUE=9|GREEN=4|YELLOW=5|SHAPE:CIRCLE=8|TRIANGLE=1|SQUARE=7|DIAMOND=3|COLSEQ:RED-YELLOW-BLUE-GREEN|SHAPESEQ:CIRCLE-SQUARE-TRIANGLE-DIAMOND|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB118",
+    "seed": 1458797551,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB118|COLOR:RED=1|BLUE=5|GREEN=9|YELLOW=4|SHAPE:CIRCLE=6|TRIANGLE=2|SQUARE=8|DIAMOND=3|COLSEQ:GREEN-RED-BLUE-YELLOW|SHAPESEQ:DIAMOND-TRIANGLE-CIRCLE-SQUARE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB118.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB118|COLOR:RED=1|BLUE=5|GREEN=9|YELLOW=4|SHAPE:CIRCLE=6|TRIANGLE=2|SQUARE=8|DIAMOND=3|COLSEQ:GREEN-RED-BLUE-YELLOW|SHAPESEQ:DIAMOND-TRIANGLE-CIRCLE-SQUARE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB119",
+    "seed": 1586551806,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB119|COLOR:RED=7|BLUE=3|GREEN=6|YELLOW=8|SHAPE:CIRCLE=4|TRIANGLE=9|SQUARE=2|DIAMOND=5|COLSEQ:YELLOW-GREEN-RED-BLUE|SHAPESEQ:SQUARE-DIAMOND-CIRCLE-TRIANGLE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB119.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      161
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB119|COLOR:RED=7|BLUE=3|GREEN=6|YELLOW=8|SHAPE:CIRCLE=4|TRIANGLE=9|SQUARE=2|DIAMOND=5|COLSEQ:YELLOW-GREEN-RED-BLUE|SHAPESEQ:SQUARE-DIAMOND-CIRCLE-TRIANGLE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB120",
+    "seed": 1935913783,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB120|COLOR:RED=4|BLUE=9|GREEN=1|YELLOW=7|SHAPE:CIRCLE=3|TRIANGLE=5|SQUARE=8|DIAMOND=2|COLSEQ:RED-BLUE-YELLOW-GREEN|SHAPESEQ:TRIANGLE-CIRCLE-DIAMOND-SQUARE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB120.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      0
+    ],
+    "hsv_v": [
+      0,
+      0
+    ],
+    "recovery_found": false,
+    "decoded_payload": "",
+    "status": "FAIL"
+  },
+  {
+    "chit_code": "BB121",
+    "seed": 676371824,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB121|COLOR:RED=8|BLUE=2|GREEN=5|YELLOW=3|SHAPE:CIRCLE=7|TRIANGLE=4|SQUARE=1|DIAMOND=9|COLSEQ:BLUE-YELLOW-RED-GREEN|SHAPESEQ:CIRCLE-SQUARE-TRIANGLE-DIAMOND|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB121.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      161
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB121|COLOR:RED=8|BLUE=2|GREEN=5|YELLOW=3|SHAPE:CIRCLE=7|TRIANGLE=4|SQUARE=1|DIAMOND=9|COLSEQ:BLUE-YELLOW-RED-GREEN|SHAPESEQ:CIRCLE-SQUARE-TRIANGLE-DIAMOND|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB122",
+    "seed": 2116659636,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB122|COLOR:RED=3|BLUE=6|GREEN=9|YELLOW=2|SHAPE:CIRCLE=5|TRIANGLE=8|SQUARE=4|DIAMOND=1|COLSEQ:GREEN-BLUE-YELLOW-RED|SHAPESEQ:DIAMOND-CIRCLE-SQUARE-TRIANGLE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB122.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB122|COLOR:RED=3|BLUE=6|GREEN=9|YELLOW=2|SHAPE:CIRCLE=5|TRIANGLE=8|SQUARE=4|DIAMOND=1|COLSEQ:GREEN-BLUE-YELLOW-RED|SHAPESEQ:DIAMOND-CIRCLE-SQUARE-TRIANGLE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB123",
+    "seed": 2140830803,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB123|COLOR:RED=6|BLUE=1|GREEN=4|YELLOW=8|SHAPE:CIRCLE=9|TRIANGLE=2|SQUARE=7|DIAMOND=5|COLSEQ:YELLOW-RED-GREEN-BLUE|SHAPESEQ:TRIANGLE-SQUARE-DIAMOND-CIRCLE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB123.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      115
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB123|COLOR:RED=6|BLUE=1|GREEN=4|YELLOW=8|SHAPE:CIRCLE=9|TRIANGLE=2|SQUARE=7|DIAMOND=5|COLSEQ:YELLOW-RED-GREEN-BLUE|SHAPESEQ:TRIANGLE-SQUARE-DIAMOND-CIRCLE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB124",
+    "seed": 1489339272,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB124|COLOR:RED=9|BLUE=5|GREEN=2|YELLOW=6|SHAPE:CIRCLE=1|TRIANGLE=7|SQUARE=3|DIAMOND=8|COLSEQ:BLUE-GREEN-RED-YELLOW|SHAPESEQ:CIRCLE-DIAMOND-SQUARE-TRIANGLE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB124.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      115
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB124|COLOR:RED=9|BLUE=5|GREEN=2|YELLOW=6|SHAPE:CIRCLE=1|TRIANGLE=7|SQUARE=3|DIAMOND=8|COLSEQ:BLUE-GREEN-RED-YELLOW|SHAPESEQ:CIRCLE-DIAMOND-SQUARE-TRIANGLE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB125",
+    "seed": 1638915379,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB125|COLOR:RED=2|BLUE=7|GREEN=8|YELLOW=4|SHAPE:CIRCLE=6|TRIANGLE=3|SQUARE=9|DIAMOND=1|COLSEQ:RED-YELLOW-BLUE-GREEN|SHAPESEQ:SQUARE-TRIANGLE-CIRCLE-DIAMOND|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB125.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB125|COLOR:RED=2|BLUE=7|GREEN=8|YELLOW=4|SHAPE:CIRCLE=6|TRIANGLE=3|SQUARE=9|DIAMOND=1|COLSEQ:RED-YELLOW-BLUE-GREEN|SHAPESEQ:SQUARE-TRIANGLE-CIRCLE-DIAMOND|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB126",
+    "seed": 212681903,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB126|COLOR:RED=5|BLUE=3|GREEN=1|YELLOW=9|SHAPE:CIRCLE=8|TRIANGLE=6|SQUARE=2|DIAMOND=4|COLSEQ:GREEN-YELLOW-BLUE-RED|SHAPESEQ:DIAMOND-SQUARE-CIRCLE-TRIANGLE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB126.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      123
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB126|COLOR:RED=5|BLUE=3|GREEN=1|YELLOW=9|SHAPE:CIRCLE=8|TRIANGLE=6|SQUARE=2|DIAMOND=4|COLSEQ:GREEN-YELLOW-BLUE-RED|SHAPESEQ:DIAMOND-SQUARE-CIRCLE-TRIANGLE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB127",
+    "seed": 1844259475,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB127|COLOR:RED=7|BLUE=8|GREEN=4|YELLOW=2|SHAPE:CIRCLE=3|TRIANGLE=9|SQUARE=5|DIAMOND=1|COLSEQ:BLUE-RED-GREEN-YELLOW|SHAPESEQ:TRIANGLE-CIRCLE-SQUARE-DIAMOND|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB127.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB127|COLOR:RED=7|BLUE=8|GREEN=4|YELLOW=2|SHAPE:CIRCLE=3|TRIANGLE=9|SQUARE=5|DIAMOND=1|COLSEQ:BLUE-RED-GREEN-YELLOW|SHAPESEQ:TRIANGLE-CIRCLE-SQUARE-DIAMOND|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB128",
+    "seed": 283307311,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB128|COLOR:RED=1|BLUE=4|GREEN=7|YELLOW=6|SHAPE:CIRCLE=9|TRIANGLE=2|SQUARE=8|DIAMOND=5|COLSEQ:YELLOW-GREEN-BLUE-RED|SHAPESEQ:CIRCLE-DIAMOND-TRIANGLE-SQUARE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB128.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      115
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB128|COLOR:RED=1|BLUE=4|GREEN=7|YELLOW=6|SHAPE:CIRCLE=9|TRIANGLE=2|SQUARE=8|DIAMOND=5|COLSEQ:YELLOW-GREEN-BLUE-RED|SHAPESEQ:CIRCLE-DIAMOND-TRIANGLE-SQUARE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB129",
+    "seed": 655277923,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB129|COLOR:RED=8|BLUE=6|GREEN=3|YELLOW=5|SHAPE:CIRCLE=4|TRIANGLE=1|SQUARE=7|DIAMOND=9|COLSEQ:RED-GREEN-YELLOW-BLUE|SHAPESEQ:SQUARE-CIRCLE-DIAMOND-TRIANGLE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB129.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB129|COLOR:RED=8|BLUE=6|GREEN=3|YELLOW=5|SHAPE:CIRCLE=4|TRIANGLE=1|SQUARE=7|DIAMOND=9|COLSEQ:RED-GREEN-YELLOW-BLUE|SHAPESEQ:SQUARE-CIRCLE-DIAMOND-TRIANGLE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  },
+  {
+    "chit_code": "BB130",
+    "seed": 98045688,
+    "difficulty": "medium",
+    "payload": "R1|V1|BB130|COLOR:RED=4|BLUE=2|GREEN=8|YELLOW=7|SHAPE:CIRCLE=6|TRIANGLE=5|SQUARE=1|DIAMOND=9|COLSEQ:GREEN-RED-BLUE-YELLOW|SHAPESEQ:DIAMOND-TRIANGLE-SQUARE-CIRCLE|ORDER:COLOR-SHAPE",
+    "image_path": "generated\\individual\\BB130.png",
+    "hsv_h": [
+      0,
+      179
+    ],
+    "hsv_s": [
+      0,
+      107
+    ],
+    "hsv_v": [
+      0,
+      153
+    ],
+    "recovery_found": true,
+    "decoded_payload": "R1|V1|BB130|COLOR:RED=4|BLUE=2|GREEN=8|YELLOW=7|SHAPE:CIRCLE=6|TRIANGLE=5|SQUARE=1|DIAMOND=9|COLSEQ:GREEN-RED-BLUE-YELLOW|SHAPESEQ:DIAMOND-TRIANGLE-SQUARE-CIRCLE|ORDER:COLOR-SHAPE",
+    "status": "PASS"
+  }
+]
