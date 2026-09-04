@@ -5,10 +5,15 @@ import {
   HsvThresholds,
   S_SEARCH_RANGE,
   V_SEARCH_RANGE,
+  continuousProximity,
+  isWithinTargetWindows,
+  maskClarity,
   maskCoverage,
   maskToImageData,
   morphologicalCleanup,
+  renderHsvDissolveImageData,
   thresholdMask,
+  thresholdProximity,
   toHsvBuffers,
 } from "./hsv";
 import { parsePayload } from "./parser";
@@ -17,6 +22,8 @@ export interface DecodeAttemptResult {
   success: boolean;
   payload: string | null;
   mask: ImageData | null;
+  renderedFrame: ImageData | null;
+  clarity: number;
 }
 
 /** Loads a File/Blob into an HTMLImageElement. */
@@ -55,7 +62,8 @@ function tryDecodeMask(
   mask = morphologicalCleanup(mask, buffers.width, buffers.height);
   const ratio = maskCoverage(mask);
 
-  if (ratio < 0.003 || ratio > 0.55) {
+  // Require BOTH sMax and vMax to be in target windows before decoding
+  if (!isWithinTargetWindows(thresholds) || ratio < 0.003 || ratio > 0.55) {
     return { mask, ratio, payload: null };
   }
 
@@ -72,18 +80,30 @@ function tryDecodeMask(
   return { mask, ratio, payload: null };
 }
 
+
 /** Attempts a single decode at the given thresholds. Used for the live preview + manual "Detect" action. */
 export function attemptDecode(
   buffers: HsvBuffers,
   thresholds: HsvThresholds = DEFAULT_THRESHOLDS
 ): DecodeAttemptResult {
   const { mask, payload } = tryDecodeMask(buffers, thresholds);
+  const densityClarity = maskClarity(mask);
+  const proximity = continuousProximity(thresholds.sMax, thresholds.vMax);
+  const clarity = payload ? 1.0 : Math.min(1, densityClarity * 0.3 + proximity * 0.7);
+
+  const renderedFrame = renderHsvDissolveImageData(buffers, thresholds);
+
   return {
     success: !!payload,
     payload,
     mask: maskToImageData(mask, buffers.width, buffers.height),
+    renderedFrame,
+    clarity,
   };
 }
+
+
+
 
 export interface AutoSearchOptions {
   expectedChitCode?: string;

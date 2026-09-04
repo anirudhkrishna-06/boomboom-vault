@@ -3,8 +3,8 @@
 import { useRef, useState } from "react";
 import { StageShell } from "../StageShell";
 
-const MAX_LEN = 12;
-const MIN_BOXES = 6;
+const MAX_LEN = 8;
+const MIN_BOXES = 8;
 
 export function VaultStage({
   chitCode,

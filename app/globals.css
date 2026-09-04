@@ -485,14 +485,45 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
-.scope img,
-.scope canvas {
+.scope-original {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.scope canvas {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.scope.warm {
+  border-color: var(--brass-line);
+  box-shadow: 0 0 18px 2px rgba(201, 162, 75, 0.3);
+}
+
+.scope.hot {
+  border-color: var(--signal-line);
+  box-shadow: 0 0 24px 4px rgba(109, 255, 166, 0.5);
+}
+
+.scope.detected {
+  border-color: var(--signal);
+  animation: signal-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes signal-pulse {
+  0%, 100% { box-shadow: 0 0 20px 4px rgba(109, 255, 166, 0.4); }
+  50% { box-shadow: 0 0 36px 8px rgba(109, 255, 166, 0.85); }
 }
 
 .scope-grid {
@@ -529,6 +560,7 @@ a {
 .scope-corner.tr { top: 8px; right: 8px; border-left: none; border-bottom: none; }
 .scope-corner.bl { bottom: 8px; left: 8px; border-right: none; border-top: none; }
 .scope-corner.br { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+
 
 /* Slider ---------------------------------------------------------------- */
 

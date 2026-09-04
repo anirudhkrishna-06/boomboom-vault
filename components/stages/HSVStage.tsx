@@ -32,12 +32,15 @@ export function HSVStage({
   const abortRef = useRef<AbortController | null>(null);
 
   const [status, setStatus] = useState<Status>("loading");
-  const [sMax, setSMax] = useState(130);
-  const [vMax, setVMax] = useState(180);
+  // Default to 230 so full camouflage image is visible on load
+  const [sMax, setSMax] = useState(230);
+  const [vMax, setVMax] = useState(230);
+
   const [hMax, setHMax] = useState(179);
   const [showHue, setShowHue] = useState(false);
   const [searchProgress, setSearchProgress] = useState(0);
   const [foundPayload, setFoundPayload] = useState<ReturnType<typeof parsePayload>>(null);
+  const [clarity, setClarity] = useState(0);
 
   // Load the image once and build HSV buffers.
   useEffect(() => {
@@ -68,8 +71,11 @@ export function HSVStage({
     canvas.width = buffers.width;
     canvas.height = buffers.height;
     const ctx = canvas.getContext("2d");
-    if (ctx && result.mask) ctx.putImageData(result.mask, 0, 0);
+    if (ctx && result.renderedFrame) {
+      ctx.putImageData(result.renderedFrame, 0, 0);
+    }
 
+    setClarity(result.clarity);
     return result;
   }, []);
 
@@ -138,6 +144,7 @@ export function HSVStage({
 
       const parsed = parsePayload(result.payload);
       setFoundPayload(parsed);
+      setClarity(1.0);
       setStatus("found");
     } else {
       setStatus("not-found");
@@ -145,6 +152,15 @@ export function HSVStage({
   }
 
   const isBusy = status === "loading" || status === "searching";
+
+  const scopeClass =
+    status === "found"
+      ? "detected"
+      : clarity > 0.65
+        ? "hot"
+        : clarity > 0.35
+          ? "warm"
+          : "";
 
   return (
     <StageShell railStage="adjust">
@@ -158,15 +174,18 @@ export function HSVStage({
         auto find do the sweep for you.
       </p>
 
-      <div className="scope" style={{ marginBottom: 18 }}>
+      <div className={`scope ${scopeClass}`} style={{ marginBottom: 18 }}>
         <canvas ref={canvasRef} />
-        <div className="scope-grid" />
-        {status === "searching" && <div className="scope-sweep" />}
-        <span className="scope-corner tl" />
-        <span className="scope-corner tr" />
-        <span className="scope-corner bl" />
-        <span className="scope-corner br" />
+        <div className="scope-grid" style={{ zIndex: 2 }} />
+        {status === "searching" && <div className="scope-sweep" style={{ zIndex: 2 }} />}
+        <span className="scope-corner tl" style={{ zIndex: 3 }} />
+        <span className="scope-corner tr" style={{ zIndex: 3 }} />
+        <span className="scope-corner bl" style={{ zIndex: 3 }} />
+        <span className="scope-corner br" style={{ zIndex: 3 }} />
       </div>
+
+
+
 
       <div style={{ marginBottom: 18, display: "flex", justifyContent: "center" }}>
         {status === "searching" && (
