@@ -73,10 +73,45 @@ export function findChitPublicInfo(chitCode: string): { exists: boolean; difficu
   return { exists: false };
 }
 
+export function computeVaultCodeFromRow(row: ChallengeRow): string {
+  const colorMap: Record<string, string> = {};
+  row.color_key.split("|").forEach((pair) => {
+    const [k, v] = pair.split("=");
+    if (k && v) colorMap[k.trim().toUpperCase()] = v.trim();
+  });
+
+  const shapeMap: Record<string, string> = {};
+  row.shape_key.split("|").forEach((pair) => {
+    const [k, v] = pair.split("=");
+    if (k && v) shapeMap[k.trim().toUpperCase()] = v.trim();
+  });
+
+  const colorCode = row.color_sequence
+    .split("-")
+    .map((c) => colorMap[c.trim().toUpperCase()] ?? "")
+    .join("");
+
+  const shapeCode = row.shape_sequence
+    .split("-")
+    .map((s) => shapeMap[s.trim().toUpperCase()] ?? "")
+    .join("");
+
+  const order = row.operation_order.trim().toUpperCase();
+  if (order === "SHAPE-COLOR") {
+    return shapeCode + colorCode;
+  }
+  return colorCode + shapeCode;
+}
+
 /** Server-only: never returns the vault code itself, only a boolean match. */
 export function validateVaultCode(chitCode: string, enteredCode: string): boolean {
   const code = chitCode.trim().toUpperCase();
   const row = loadRows().find((r) => r.chit_code.toUpperCase() === code);
   if (!row) return false;
-  return row.vault_code.trim() === enteredCode.trim();
+
+  const expectedVaultCode = computeVaultCodeFromRow(row);
+  const entered = enteredCode.trim();
+
+  return entered === expectedVaultCode || entered === row.vault_code.trim();
 }
+

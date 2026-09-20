@@ -2,15 +2,28 @@
 
 import { useRef, useState } from "react";
 import { StageShell } from "../StageShell";
+import { McqAnswer, McqGate } from "@/lib/mcq/questions";
+import { combineCipherCodes, deriveColorCode, deriveShapeCode } from "@/lib/qr/cipher";
+import { ParsedPayload } from "@/lib/qr/parser";
 
-const MAX_LEN = 12;
-const MIN_BOXES = 6;
+const MAX_LEN = 8;
+const MIN_BOXES = 8;
 
 export function VaultStage({
   chitCode,
+  teamName,
+  payload,
+  colorCode,
+  shapeCode,
+  mcqAnswers,
   onSuccess,
 }: {
   chitCode: string;
+  teamName: string;
+  payload: ParsedPayload | null;
+  colorCode: string;
+  shapeCode: string;
+  mcqAnswers: Partial<Record<McqGate, McqAnswer>>;
   onSuccess: () => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -25,11 +38,22 @@ export function VaultStage({
     setDenied(false);
     setError(null);
 
+    const mcqRows = [
+      { gate: "color" as const, label: "Color MCQ", answer: mcqAnswers.color },
+      { gate: "shape" as const, label: "Shape MCQ", answer: mcqAnswers.shape },
+    ];
+    const mcqScore = mcqRows.filter((row) => row.answer?.isCorrect).length;
+
     try {
       const res = await fetch("/api/validate-vault", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chitCode, enteredVaultCode: value.trim() }),
+        body: JSON.stringify({
+          chitCode,
+          teamName,
+          enteredVaultCode: value.trim(),
+          mcqScore,
+        }),
       });
       const data = await res.json();
 
@@ -45,6 +69,10 @@ export function VaultStage({
     }
   }
 
+  const resolvedColorCode = colorCode || (payload ? deriveColorCode(payload) : "");
+  const resolvedShapeCode = shapeCode || (payload ? deriveShapeCode(payload) : "");
+  const order = payload?.operationOrder?.length ? payload.operationOrder : ["COLOR", "SHAPE"];
+  const finalPreview = combineCipherCodes(resolvedColorCode, resolvedShapeCode, order);
   const boxCount = Math.max(MIN_BOXES, value.length);
   const boxes = Array.from({ length: boxCount }, (_, i) => value[i] ?? "");
 
@@ -60,11 +88,22 @@ export function VaultStage({
         final code.
       </p>
 
-      <div
-        className="vault-input-wrap"
-        onClick={() => inputRef.current?.focus()}
-        style={{ marginBottom: 8 }}
-      >
+      <div className="vault-summary">
+        <div className="code-strip">
+          <span>Color code</span>
+          <strong className="mono">{resolvedColorCode || "----"}</strong>
+        </div>
+        <div className="code-strip">
+          <span>Shape code</span>
+          <strong className="mono">{resolvedShapeCode || "----"}</strong>
+        </div>
+        <div className="code-strip emphasis">
+          <span>Order</span>
+          <strong className="mono">{order.join(" + ")}</strong>
+        </div>
+      </div>
+
+      <div className="vault-input-wrap" onClick={() => inputRef.current?.focus()} style={{ marginBottom: 8 }}>
         <div className="vault-boxes">
           {boxes.map((ch, i) => (
             <div className={`vault-box ${ch ? "filled" : ""}`} key={i}>
@@ -104,7 +143,7 @@ export function VaultStage({
 
       <div className="stage-footer">
         <button className="btn btn-primary" onClick={submit} disabled={submitting || !value}>
-          {submitting ? "Unlocking…" : "Unlock"}
+          {submitting ? "Unlocking..." : "Unlock"}
         </button>
       </div>
     </StageShell>

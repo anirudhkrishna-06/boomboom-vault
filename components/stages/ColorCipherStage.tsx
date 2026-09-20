@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { StageShell } from "../StageShell";
+import { buildObfuscatedDisplayEntries, deriveChitOffsetKey } from "@/lib/cipher/obfuscation";
 import { ParsedPayload } from "@/lib/qr/parser";
 
 const SWATCH: Record<string, string> = {
@@ -13,17 +14,45 @@ const SWATCH: Record<string, string> = {
   MAGENTA: "#d15fd6",
   ORANGE: "#e2914f",
   PURPLE: "#9d6fe0",
+  LIME: "#9bd94a",
+  PINK: "#f07ab8",
+  TEAL: "#3fb9ad",
+  BROWN: "#9a6a3a",
+  WHITE: "#e8e8df",
+  BLACK: "#242424",
+  MAROON: "#8b2d3b",
+  NAVY: "#253f78",
 };
+
+const COLOR_DISTRACTORS = [
+  "LIME",
+  "PINK",
+  "TEAL",
+  "BROWN",
+  "WHITE",
+  "BLACK",
+  "MAROON",
+  "NAVY",
+];
 
 export function ColorCipherStage({
   payload,
+  savedAnswer,
   onContinue,
 }: {
   payload: ParsedPayload;
+  savedAnswer: string;
   onContinue: (workingAnswer: string) => void;
 }) {
-  const [answer, setAnswer] = useState("");
-  const colorEntries = Object.entries(payload.colorMap);
+  const [answer, setAnswer] = useState(savedAnswer);
+  const offsetKey = deriveChitOffsetKey(payload.chitCode);
+  const colorEntries = buildObfuscatedDisplayEntries({
+    map: payload.colorMap,
+    sequence: payload.colorSequence,
+    candidates: COLOR_DISTRACTORS,
+    chitCode: payload.chitCode,
+    namespace: "color",
+  });
 
   return (
     <StageShell railStage="color">
@@ -34,14 +63,21 @@ export function ColorCipherStage({
       <h2 className="stage-title">Color cipher</h2>
       <p className="stage-sub">Match each color to its digit, then work through the sequence.</p>
 
+      <div className="panel cipher-legend">
+        <p>
+          Add the digits in your chit code, keep the last digit, then subtract that key from each
+          displayed table digit. Only colors in the sequence build the code.
+        </p>
+      </div>
+
       <div className="cipher-grid">
-        {colorEntries.map(([name, num]) => (
-          <div className="cipher-row-pair" key={name} style={{ display: "contents" }}>
+        {colorEntries.map((entry) => (
+          <div className="cipher-row-pair" key={entry.name} style={{ display: "contents" }}>
             <div className="cipher-cell">
-              <span className="swatch" style={{ background: SWATCH[name] ?? "#666" }} />
-              {name}
+              <span className="swatch" style={{ background: SWATCH[entry.name] ?? "#666" }} />
+              {entry.name}
             </div>
-            <div className="cipher-cell num">{num}</div>
+            <div className="cipher-cell num">{entry.displayDigit}</div>
           </div>
         ))}
       </div>
@@ -51,23 +87,28 @@ export function ColorCipherStage({
         {payload.colorSequence.map((c, i) => (
           <span key={i} style={{ display: "contents" }}>
             <span className="sequence-chip">{c}</span>
-            {i < payload.colorSequence.length - 1 && <span className="sequence-arrow">→</span>}
+            {i < payload.colorSequence.length - 1 && <span className="sequence-arrow">-&gt;</span>}
           </span>
         ))}
       </div>
 
-      <span className="field-label">Your working (optional)</span>
+      <span className="field-label">Color code</span>
       <input
         className="input"
         placeholder="e.g. 5921"
         value={answer}
-        onChange={(e) => setAnswer(e.target.value)}
+        inputMode="numeric"
+        onChange={(e) => setAnswer(e.target.value.replace(/[^0-9]/g, ""))}
         style={{ fontSize: 18, marginBottom: 4 }}
       />
 
       <div className="stage-footer">
-        <button className="btn btn-primary" onClick={() => onContinue(answer)}>
-          Continue →
+        <button
+          className="btn btn-primary"
+          onClick={() => onContinue(answer)}
+          disabled={answer.trim().length === 0}
+        >
+          Continue -&gt;
         </button>
       </div>
     </StageShell>

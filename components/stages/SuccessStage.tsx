@@ -1,8 +1,25 @@
 "use client";
 
 import { StageShell } from "../StageShell";
+import { McqAnswer, McqGate } from "@/lib/mcq/questions";
 
-export function SuccessStage({ chitCode }: { chitCode: string }) {
+export function SuccessStage({
+  chitCode,
+  teamName,
+  mcqAnswers,
+}: {
+  chitCode: string;
+  teamName: string;
+  mcqAnswers?: Partial<Record<McqGate, McqAnswer>>;
+}) {
+  const answers = mcqAnswers ?? {};
+
+  const mcqRows = [
+    { gate: "color" as const, label: "Color MCQ", answer: answers.color },
+    { gate: "shape" as const, label: "Shape MCQ", answer: answers.shape },
+  ];
+  const mcqScore = mcqRows.filter((row) => row.answer?.isCorrect).length;
+
   return (
     <StageShell>
       <div className="center-stage">
@@ -27,6 +44,27 @@ export function SuccessStage({ chitCode }: { chitCode: string }) {
         <p style={{ color: "var(--text-muted)", fontSize: 15, maxWidth: 30 + "ch" }}>
           Round 01 complete. Show this screen to the coordinator.
         </p>
+        <p style={{ color: "var(--text-muted)", fontSize: 14, marginTop: 8 }}>
+          Team: <strong>{teamName}</strong>
+        </p>
+      </div>
+
+      <div className="panel mcq-review">
+        <div className="mcq-review-head">
+          <span className="field-label">MCQ</span>
+          <strong className="mono">{mcqScore}/2</strong>
+        </div>
+        {mcqRows.map((row) => (
+          <div className="mcq-review-row" key={row.gate}>
+            <div>
+              <span className="mono">{row.label}</span>
+              <p>{row.answer?.selectedOption ?? "No answer recorded"}</p>
+            </div>
+            <strong className={row.answer?.isCorrect ? "mcq-correct" : "mcq-wrong"}>
+              {row.answer ? (row.answer.isCorrect ? "CORRECT" : "WRONG") : "MISSING"}
+            </strong>
+          </div>
+        ))}
       </div>
     </StageShell>
   );

@@ -1,19 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { StageShell } from "../StageShell";
-import {
-  attemptDecode,
-  autoSearch,
-  buildBuffers,
-  loadImage,
-} from "@/lib/qr/decoder";
-import { HsvBuffers, HsvThresholds } from "@/lib/qr/hsv";
-import { parsePayload } from "@/lib/qr/parser";
+import { buildBuffers, loadImage, verifyOriginalImage } from "@/lib/qr/decoder";
+import { HsvBuffers, HsvThresholds, renderHsvDissolveImageData } from "@/lib/qr/hsv";
+import { ParsedPayload } from "@/lib/qr/parser";
 
-type Status = "idle" | "loading" | "searching" | "found" | "wrong" | "not-found";
+type Status = "idle" | "loading" | "checking" | "found" | "wrong" | "not-found";
 
 const PREVIEW_DIM = 640;
+
+// Sliders target range where the QR becomes visually unmasked & clear to the participant
+const S_MIN_TARGET = 65;
+const S_MAX_TARGET = 165;
+const V_MIN_TARGET = 75;
+const V_MAX_TARGET = 205;
 
 export function HSVStage({
   chitCode,
@@ -23,128 +24,115 @@ export function HSVStage({
 }: {
   chitCode: string;
   file: File;
-  onDecoded: (payload: ReturnType<typeof parsePayload>) => void;
+  onDecoded: (payload: ParsedPayload | null) => void;
   onRetake: () => void;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const buffersRef = useRef<HsvBuffers | null>(null);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const abortRef = useRef<AbortController | null>(null);
 
   const [status, setStatus] = useState<Status>("loading");
-  const [sMax, setSMax] = useState(130);
-  const [vMax, setVMax] = useState(180);
-  const [hMax, setHMax] = useState(179);
-  const [showHue, setShowHue] = useState(false);
-  const [searchProgress, setSearchProgress] = useState(0);
-  const [foundPayload, setFoundPayload] = useState<ReturnType<typeof parsePayload>>(null);
+  // Sliders start at 255 so the full-color uploaded photo from Stage 2 is initially displayed.
+  // Participants adjust the sliders to filter out background camouflage noise.
+  const [sMax, setSMax] = useState(255);
+  const [vMax, setVMax] = useState(255);
+  const [foundPayload, setFoundPayload] = useState<ParsedPayload | null>(null);
 
-  // Load the image once and build HSV buffers.
+  const thresholds: HsvThresholds = {
+    hMin: 0,
+    hMax: 179,
+    sMax,
+    vMax,
+    cleanupPasses: 1,
+  };
+
+  // Determine whether the sliders are in the target range where the QR is visually clear
+  const isQrVisible =
+    sMax >= S_MIN_TARGET && sMax <= S_MAX_TARGET && vMax >= V_MIN_TARGET && vMax <= V_MAX_TARGET;
+
+  const drawFrame = useCallback((frame: ImageData | null) => {
+    const canvas = canvasRef.current;
+    if (!canvas || !frame) return;
+
+    canvas.width = frame.width;
+    canvas.height = frame.height;
+    canvas.getContext("2d")?.putImageData(frame, 0, 0);
+  }, []);
+
+  const renderPreview = useCallback(
+    (nextThresholds: HsvThresholds) => {
+      const buffers = buffersRef.current;
+      if (!buffers) return;
+
+      const frame = renderHsvDissolveImageData(buffers, nextThresholds);
+      drawFrame(frame);
+    },
+    [drawFrame]
+  );
+
   useEffect(() => {
     let cancelled = false;
+
     (async () => {
       try {
         const img = await loadImage(file);
         if (cancelled) return;
-        buffersRef.current = buildBuffers(img, PREVIEW_DIM);
+
+        const buffers = buildBuffers(img, PREVIEW_DIM);
+        buffersRef.current = buffers;
         setStatus("idle");
-        renderMask({ hMin: 0, hMax, sMax, vMax });
+        renderPreview(thresholds);
       } catch {
         if (!cancelled) setStatus("idle");
       }
     })();
+
     return () => {
       cancelled = true;
     };
+    // Initial load only
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file]);
 
-  const renderMask = useCallback((thresholds: HsvThresholds) => {
-    const buffers = buffersRef.current;
-    const canvas = canvasRef.current;
-    if (!buffers || !canvas) return;
-
-    const result = attemptDecode(buffers, thresholds);
-    canvas.width = buffers.width;
-    canvas.height = buffers.height;
-    const ctx = canvas.getContext("2d");
-    if (ctx && result.mask) ctx.putImageData(result.mask, 0, 0);
-
-    return result;
-  }, []);
-
-  const evaluate = useCallback(
-    (thresholds: HsvThresholds) => {
-      const result = renderMask(thresholds);
-      if (!result) return;
-
-      if (result.success && result.payload) {
-        const parsed = parsePayload(result.payload);
-        if (parsed && parsed.chitCode === chitCode.toUpperCase()) {
-          setStatus("found");
-          setFoundPayload(parsed);
-          return;
-        }
-        if (parsed) {
-          setStatus("wrong");
-          return;
-        }
-      }
-      setStatus((s) => (s === "found" || s === "wrong" ? "idle" : s));
-    },
-    [renderMask, chitCode]
-  );
-
-  // Debounced re-evaluation whenever a slider changes.
   useEffect(() => {
-    if (status === "loading" || status === "searching") return;
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      evaluate({ hMin: 0, hMax, sMax, vMax });
-    }, 90);
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
+    if (status === "loading" || status === "checking") return;
+    renderPreview(thresholds);
+    if (status === "found" || status === "wrong" || status === "not-found") {
+      setStatus("idle");
+      setFoundPayload(null);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sMax, vMax, hMax]);
+  }, [sMax, vMax]);
 
-  async function handleAutoFind() {
+  async function handleCheckSignal() {
     const buffers = buffersRef.current;
     if (!buffers) return;
 
-    setStatus("searching");
-    setSearchProgress(0);
-    abortRef.current?.abort();
-    const controller = new AbortController();
-    abortRef.current = controller;
+    if (!isQrVisible) {
+      setStatus("not-found");
+      return;
+    }
 
-    const result = await autoSearch(buffers, {
-      expectedChitCode: chitCode,
-      onProgress: setSearchProgress,
-      signal: controller.signal,
-    });
-
-    if (result.success && result.payload && result.thresholds) {
-      setSMax(result.thresholds.sMax);
-      setVMax(result.thresholds.vMax);
-      setHMax(result.thresholds.hMax);
-
-      const canvas = canvasRef.current;
-      if (canvas && result.mask) {
-        canvas.width = result.mask.width;
-        canvas.height = result.mask.height;
-        canvas.getContext("2d")?.putImageData(result.mask, 0, 0);
+    setStatus("checking");
+    try {
+      const result = await verifyOriginalImage(buffers, chitCode);
+      if (result.success && result.payload) {
+        setFoundPayload(result.payload);
+        setStatus("found");
+        onDecoded(result.payload);
+      } else if (result.error === "wrong") {
+        setFoundPayload(null);
+        setStatus("wrong");
+      } else {
+        setFoundPayload(null);
+        setStatus("not-found");
       }
-
-      const parsed = parsePayload(result.payload);
-      setFoundPayload(parsed);
-      setStatus("found");
-    } else {
+    } catch {
       setStatus("not-found");
     }
   }
 
-  const isBusy = status === "loading" || status === "searching";
+  const isBusy = status === "loading" || status === "checking";
+  const scopeClass = status === "found" ? "detected" : isQrVisible ? "hot" : "";
 
   return (
     <StageShell railStage="adjust">
@@ -152,29 +140,22 @@ export function HSVStage({
         <span className="rule" />
         STAGE 03
       </div>
-      <h2 className="stage-title">Reveal the signal</h2>
+      <h2 className="stage-title">Reveal the QR code</h2>
       <p className="stage-sub">
-        The QR is hidden in the texture. Filter by saturation and value to isolate it — or let
-        auto find do the sweep for you.
+        Adjust the sliders to remove the filter and reveal the QR code clearly, then click Check QR.
       </p>
 
-      <div className="scope" style={{ marginBottom: 18 }}>
+      <div className={`scope ${scopeClass}`} style={{ marginBottom: 14 }}>
         <canvas ref={canvasRef} />
-        <div className="scope-grid" />
-        {status === "searching" && <div className="scope-sweep" />}
-        <span className="scope-corner tl" />
-        <span className="scope-corner tr" />
-        <span className="scope-corner bl" />
-        <span className="scope-corner br" />
+        <div className="scope-grid" style={{ zIndex: 2 }} />
+        {status === "checking" && <div className="scope-sweep" style={{ zIndex: 2 }} />}
+        <span className="scope-corner tl" style={{ zIndex: 3 }} />
+        <span className="scope-corner tr" style={{ zIndex: 3 }} />
+        <span className="scope-corner bl" style={{ zIndex: 3 }} />
+        <span className="scope-corner br" style={{ zIndex: 3 }} />
       </div>
 
-      <div style={{ marginBottom: 18, display: "flex", justifyContent: "center" }}>
-        {status === "searching" && (
-          <span className="status-pill searching">
-            <span className="led" />
-            SEARCHING… {Math.round(searchProgress * 100)}%
-          </span>
-        )}
+      <div style={{ marginBottom: 16, display: "flex", justifyContent: "center" }}>
         {status === "found" && (
           <span className="status-pill found">
             <span className="led" />
@@ -193,94 +174,75 @@ export function HSVStage({
             NO MATCH YET
           </span>
         )}
-        {(status === "idle" || status === "loading") && (
-          <span className="status-pill">
+        {(status === "idle" || status === "loading" || status === "checking") && (
+          <span className={`status-pill ${status === "checking" ? "searching" : isQrVisible ? "found" : ""}`}>
             <span className="led" />
-            {status === "loading" ? "PREPARING IMAGE…" : "ADJUST TO REVEAL"}
+            {status === "loading"
+              ? "PREPARING IMAGE..."
+              : status === "checking"
+                ? "VERIFYING QR..."
+                : isQrVisible
+                  ? "QR VISIBLE — READY TO CHECK"
+                  : "FULL PHOTO — ADJUST SLIDERS TO FILTER"}
           </span>
         )}
       </div>
 
       {status === "found" && foundPayload ? (
-        <div className="panel text-center" style={{ marginBottom: 20 }}>
+        <div className="panel text-center" style={{ marginBottom: 18 }}>
           <p className="mono" style={{ color: "var(--signal)", fontSize: 13, marginBottom: 6 }}>
-            ✓ QR FOUND
+            QR VERIFIED
           </p>
           <p className="mono" style={{ fontSize: 22, letterSpacing: "0.08em" }}>
             {foundPayload.chitCode}
           </p>
         </div>
       ) : (
-        <div style={{ marginBottom: 6 }}>
-          <div className="slider-row">
-            <div className="slider-head">
-              <span className="slider-name">Saturation</span>
-              <span className="slider-value">≤ {sMax}</span>
-            </div>
-            <input
-              type="range"
-              min={0}
-              max={255}
-              value={sMax}
-              disabled={isBusy}
-              onChange={(e) => setSMax(Number(e.target.value))}
-            />
-          </div>
-
-          <div className="slider-row">
-            <div className="slider-head">
-              <span className="slider-name">Value</span>
-              <span className="slider-value">≤ {vMax}</span>
-            </div>
-            <input
-              type="range"
-              min={0}
-              max={255}
-              value={vMax}
-              disabled={isBusy}
-              onChange={(e) => setVMax(Number(e.target.value))}
-            />
-          </div>
-
-          {showHue ? (
-            <div className="slider-row">
-              <div className="slider-head">
-                <span className="slider-name">Hue ceiling</span>
-                <span className="slider-value">≤ {hMax}</span>
-              </div>
-              <input
-                type="range"
-                min={0}
-                max={179}
-                value={hMax}
-                disabled={isBusy}
-                onChange={(e) => setHMax(Number(e.target.value))}
-              />
-            </div>
-          ) : (
-            <button
-              className="btn-sm btn-ghost"
-              style={{ marginBottom: 10 }}
-              onClick={() => setShowHue(true)}
-            >
-              + Hue control (rarely needed)
-            </button>
-          )}
+        <div className="adjuster-panel">
+          <Slider
+            label="Saturation filter"
+            value={sMax}
+            min={0}
+            max={255}
+            disabled={isBusy}
+            onChange={setSMax}
+          />
+          <Slider
+            label="Value filter"
+            value={vMax}
+            min={0}
+            max={255}
+            disabled={isBusy}
+            onChange={setVMax}
+          />
+          <p className="helper-text" style={{ marginTop: 4, marginBottom: 16 }}>
+            Lower the saturation and value sliders to filter out background camouflage noise until the QR pattern is clearly visible.
+          </p>
         </div>
       )}
 
       <div className="stack">
         {status !== "found" && (
-          <button className="btn btn-signal" onClick={handleAutoFind} disabled={isBusy}>
-            {status === "searching" ? "Searching…" : "Auto find"}
+          <button
+            className="btn btn-signal"
+            onClick={handleCheckSignal}
+            disabled={isBusy || !isQrVisible}
+            title={!isQrVisible ? "Adjust sliders to make the QR code clearly visible first" : undefined}
+          >
+            {status === "checking" ? "Verifying..." : "Check QR"}
           </button>
         )}
+        {!isQrVisible && status !== "found" && (
+          <p className="helper-text text-center" style={{ marginTop: -8, marginBottom: 8, color: "var(--warn, #e09a4a)" }}>
+            Adjust sliders to reveal the QR pattern before checking.
+          </p>
+        )}
         {status === "found" ? (
-          <button className="btn btn-primary" onClick={() => onDecoded(foundPayload)}>
-            Continue →
+          <button className="btn btn-primary" onClick={() => foundPayload && onDecoded(foundPayload)}>
+            Continue -&gt;
           </button>
         ) : (
-          <button className="btn btn-ghost" onClick={onRetake} disabled={status === "searching"}>
+          <button className="btn btn-ghost" onClick={onRetake} disabled={isBusy}>
             Retake photo
           </button>
         )}
@@ -288,10 +250,43 @@ export function HSVStage({
 
       {status === "wrong" && (
         <p className="error-text text-center" style={{ marginTop: 12 }}>
-          This QR belongs to another challenge. Make sure you're photographing the QR for{" "}
-          {chitCode}.
+          This QR code belongs to another challenge. Make sure you're photographing the QR for {chitCode}.
         </p>
       )}
     </StageShell>
   );
 }
+
+function Slider({
+  label,
+  value,
+  min,
+  max,
+  disabled,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  disabled: boolean;
+  onChange: (value: number) => void;
+}) {
+  return (
+    <div className="slider-row">
+      <div className="slider-head">
+        <span className="slider-name">{label}</span>
+        <span className="slider-value">{value}</span>
+      </div>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        value={value}
+        disabled={disabled}
+        onChange={(e) => onChange(Number(e.target.value))}
+      />
+    </div>
+  );
+}
+
