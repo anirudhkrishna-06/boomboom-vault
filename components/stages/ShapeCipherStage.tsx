@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { StageShell } from "../StageShell";
+import { buildObfuscatedDisplayEntries, deriveChitOffsetKey } from "@/lib/cipher/obfuscation";
 import { deriveShapeCode } from "@/lib/qr/cipher";
 import { ParsedPayload } from "@/lib/qr/parser";
 
@@ -10,7 +11,15 @@ const SHAPE_ICON: Record<string, string> = {
   TRIANGLE: "^",
   SQUARE: "[]",
   DIAMOND: "<>",
+  STAR: "*",
+  HEXAGON: "HX",
+  PENTAGON: "P5",
+  OVAL: "O-",
+  CROSS: "+",
+  RING: "()",
 };
+
+const SHAPE_DISTRACTORS = ["STAR", "HEXAGON", "PENTAGON", "OVAL", "CROSS", "RING"];
 
 export function ShapeCipherStage({
   payload,
@@ -24,8 +33,15 @@ export function ShapeCipherStage({
   onContinue: (workingAnswer: string) => void;
 }) {
   const derivedCode = deriveShapeCode(payload);
-  const [answer, setAnswer] = useState(savedAnswer ?? "");
-  const shapeEntries = Object.entries(payload.shapeMap);
+  const [answer, setAnswer] = useState(savedAnswer || derivedCode);
+  const offsetKey = deriveChitOffsetKey(payload.chitCode);
+  const shapeEntries = buildObfuscatedDisplayEntries({
+    map: payload.shapeMap,
+    sequence: payload.shapeSequence,
+    candidates: SHAPE_DISTRACTORS,
+    chitCode: payload.chitCode,
+    namespace: "shape",
+  });
 
   return (
     <StageShell railStage="shape">
@@ -41,14 +57,22 @@ export function ShapeCipherStage({
         <strong className="mono">{colorCode || "----"}</strong>
       </div>
 
+      <div className="panel cipher-legend">
+        <p className="mono">CHIT KEY: {offsetKey}</p>
+        <p>
+          Add the digits in your chit code, keep the last digit, then subtract that key from each
+          displayed table digit. Only shapes in the sequence build the code.
+        </p>
+      </div>
+
       <div className="cipher-grid">
-        {shapeEntries.map(([name, num]) => (
-          <div style={{ display: "contents" }} key={name}>
+        {shapeEntries.map((entry) => (
+          <div style={{ display: "contents" }} key={entry.name}>
             <div className="cipher-cell">
-              <span className="shape-icon">{SHAPE_ICON[name] ?? "?"}</span>
-              {name}
+              <span className="shape-icon">{SHAPE_ICON[entry.name] ?? "?"}</span>
+              {entry.name}
             </div>
-            <div className="cipher-cell num">{num}</div>
+            <div className="cipher-cell num">{entry.displayDigit}</div>
           </div>
         ))}
       </div>
