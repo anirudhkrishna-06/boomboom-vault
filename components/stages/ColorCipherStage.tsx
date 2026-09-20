@@ -26,7 +26,7 @@ export function ColorCipherStage({
   onContinue: (workingAnswer: string) => void;
 }) {
   const derivedCode = deriveColorCode(payload);
-  const [answer, setAnswer] = useState(savedAnswer || derivedCode);
+  const [answer, setAnswer] = useState(savedAnswer ?? "");
   const colorEntries = Object.entries(payload.colorMap);
 
   return (
@@ -71,7 +71,11 @@ export function ColorCipherStage({
       />
 
       <div className="stage-footer">
-        <button className="btn btn-primary" onClick={() => onContinue(answer || derivedCode)}>
+        <button
+          className="btn btn-primary"
+          onClick={() => onContinue(answer)}
+          disabled={answer.trim().length === 0}
+        >
           Continue -&gt;
         </button>
       </div>

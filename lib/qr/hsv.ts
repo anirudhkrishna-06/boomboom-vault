@@ -209,20 +209,38 @@ export function maskCoverage(mask: Uint8ClampedArray): number {
   return on / mask.length;
 }
 
-/** Returns a 0–1 clarity score: how QR-like is this mask based on coverage density. */
+/** Returns a 0–1 clarity score: how QR-like is this mask based on coverage density.
+ *  Peaks at ~25% coverage (typical QR module fill) with a gentle falloff on either side.
+ *  Much wider window than the old formula so real photos don't need pixel-perfect thresholds.
+ */
 export function maskClarity(mask: Uint8ClampedArray): number {
   const coverage = maskCoverage(mask);
-  if (coverage < 0.03 || coverage > 0.60) return 0;
-  const coverageScore = 1 - Math.abs(coverage - 0.18) / 0.18;
-  return Math.max(0, Math.min(1, coverageScore));
+  // Too sparse (empty mask) or too dense (whole image dark) → useless
+  if (coverage < 0.03 || coverage > 0.65) return 0;
+
+  // QR modules typically occupy 15–40% of a well-framed scan.
+  // Score peaks at ~25% and falls off gently — linear ramps on each side.
+  const optimal = 0.25;
+  if (coverage <= optimal) {
+    // 3 % → 0, 25 % → 1
+    return (coverage - 0.03) / (optimal - 0.03);
+  } else {
+    // 25 % → 1, 65 % → 0
+    return Math.max(0, 1 - (coverage - optimal) / (0.65 - optimal));
+  }
 }
 
-/** Shared 0-1 readout used by both live preview and explicit decode checks. */
-export function computeClarity(mask: Uint8ClampedArray, thresholds: HsvThresholds): number {
-  const densityClarity = maskClarity(mask);
-  const proximity = continuousProximity(thresholds.sMax, thresholds.vMax);
-  const targetWindowBonus = isWithinTargetWindows(thresholds) ? 0.12 : 0;
-  return Math.min(1, densityClarity * 0.55 + proximity * 0.33 + targetWindowBonus);
+/**
+ * Shared 0-1 readout used by both live preview and explicit decode checks.
+ *
+ * Score is based SOLELY on mask density — the only reliable, photo-independent
+ * predictor of QR decodability. The old "proximity to default slider values"
+ * component was removed because it gave misleading feedback: different photos
+ * need different thresholds, and rewarding sliders being near sMax=130 / vMax=180
+ * caused users to chase a score that made the QR LESS visible, not more.
+ */
+export function computeClarity(mask: Uint8ClampedArray, _thresholds?: HsvThresholds): number {
+  return maskClarity(mask);
 }
 
 /** Measures how close current thresholds are to target thresholds (default sMax=130, vMax=180). */
