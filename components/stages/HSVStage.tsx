@@ -142,7 +142,7 @@ export function HSVStage({
       </div>
       <h2 className="stage-title">Reveal the QR code</h2>
       <p className="stage-sub">
-        Adjust the sliders to remove the filter and reveal the QR code clearly, then click Check signal.
+        Adjust the sliders to remove the filter and reveal the QR code clearly, then click Check QR.
       </p>
 
       <div className={`scope ${scopeClass}`} style={{ marginBottom: 14 }}>
@@ -229,7 +229,7 @@ export function HSVStage({
             disabled={isBusy || !isQrVisible}
             title={!isQrVisible ? "Adjust sliders to make the QR code clearly visible first" : undefined}
           >
-            {status === "checking" ? "Verifying..." : "Check signal"}
+            {status === "checking" ? "Verifying..." : "Check QR"}
           </button>
         )}
         {!isQrVisible && status !== "found" && (

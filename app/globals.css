@@ -330,8 +330,8 @@ a {
 }
 
 .btn-signal {
-  background: linear-gradient(180deg, #83ffb8, var(--signal));
-  color: #0a1a10;
+  background: linear-gradient(180deg, #d8b25f, var(--brass));
+  color: #0a0a0a;
 }
 
 .btn-sm {
