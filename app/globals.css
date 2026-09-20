@@ -810,6 +810,122 @@ input[type="range"]::-moz-range-thumb {
   color: var(--text-faint);
 }
 
+/* MCQ gates --------------------------------------------------------------- */
+
+.mcq-panel {
+  padding: 18px;
+}
+
+.mcq-question {
+  font-size: 17px;
+  line-height: 1.45;
+  margin-bottom: 16px;
+}
+
+.mcq-options {
+  display: grid;
+  gap: 10px;
+}
+
+.mcq-option {
+  appearance: none;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--text);
+  padding: 13px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.mcq-option .mono {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+.mcq-option.selected {
+  border-color: var(--brass-line);
+  background: var(--brass-soft);
+}
+
+.mcq-option.selected .mono {
+  color: var(--brass);
+  border-color: var(--brass-line);
+}
+
+.mcq-review {
+  padding: 16px;
+  margin-bottom: 18px;
+}
+
+.mcq-review-head,
+.mcq-review-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.mcq-review-head {
+  margin-bottom: 12px;
+}
+
+.mcq-review-head .field-label {
+  margin-bottom: 0;
+}
+
+.mcq-review-head strong {
+  color: var(--brass);
+  font-size: 16px;
+}
+
+.mcq-review-row {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  margin-top: 12px;
+}
+
+.mcq-review-row .mono {
+  color: var(--text);
+  font-size: 12px;
+}
+
+.mcq-review-row p {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.45;
+  margin-top: 4px;
+}
+
+.mcq-review-row strong {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+}
+
+.mcq-correct {
+  color: var(--signal);
+}
+
+.mcq-wrong {
+  color: var(--danger);
+}
+
 /* Vault ------------------------------------------------------------------- */
 
 .vault-boxes {

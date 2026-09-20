@@ -5,13 +5,25 @@ import { ChitStage } from "@/components/stages/ChitStage";
 import { FindQRStage } from "@/components/stages/FindQRStage";
 import { ScanQRStage } from "@/components/stages/ScanQRStage";
 import { HSVStage } from "@/components/stages/HSVStage";
+import { MCQStage } from "@/components/stages/MCQStage";
 import { ColorCipherStage } from "@/components/stages/ColorCipherStage";
 import { ShapeCipherStage } from "@/components/stages/ShapeCipherStage";
 import { VaultStage } from "@/components/stages/VaultStage";
 import { SuccessStage } from "@/components/stages/SuccessStage";
+import { McqAnswer, pickMcqQuestions } from "@/lib/mcq/questions";
 import { ParsedPayload } from "@/lib/qr/parser";
 
-type Stage = "chit" | "find" | "scan" | "adjust" | "color" | "shape" | "vault" | "success";
+type Stage =
+  | "chit"
+  | "find"
+  | "scan"
+  | "adjust"
+  | "colorMcq"
+  | "color"
+  | "shapeMcq"
+  | "shape"
+  | "vault"
+  | "success";
 
 export default function Home() {
   const [stage, setStage] = useState<Stage>("chit");
@@ -20,6 +32,7 @@ export default function Home() {
   const [payload, setPayload] = useState<ParsedPayload | null>(null);
   const [colorCode, setColorCode] = useState("");
   const [shapeCode, setShapeCode] = useState("");
+  const [mcqAnswers, setMcqAnswers] = useState<Partial<Record<"color" | "shape", McqAnswer>>>({});
 
   switch (stage) {
     case "chit":
@@ -60,7 +73,8 @@ export default function Home() {
             setPayload(parsed);
             setColorCode("");
             setShapeCode("");
-            setStage("color");
+            setMcqAnswers({});
+            setStage("colorMcq");
           }}
           onRetake={() => {
             setCapturedFile(null);
@@ -68,6 +82,24 @@ export default function Home() {
           }}
         />
       );
+
+    case "colorMcq": {
+      if (!payload) {
+        setStage("adjust");
+        return null;
+      }
+      const question = pickMcqQuestions(chitCode).color;
+      return (
+        <MCQStage
+          gate="color"
+          question={question}
+          onContinue={(answer) => {
+            setMcqAnswers((current) => ({ ...current, color: answer }));
+            setStage("color");
+          }}
+        />
+      );
+    }
 
     case "color":
       if (!payload) {
@@ -80,10 +112,28 @@ export default function Home() {
           savedAnswer={colorCode}
           onContinue={(answer) => {
             setColorCode(answer);
+            setStage("shapeMcq");
+          }}
+        />
+      );
+
+    case "shapeMcq": {
+      if (!payload) {
+        setStage("adjust");
+        return null;
+      }
+      const question = pickMcqQuestions(chitCode).shape;
+      return (
+        <MCQStage
+          gate="shape"
+          question={question}
+          onContinue={(answer) => {
+            setMcqAnswers((current) => ({ ...current, shape: answer }));
             setStage("shape");
           }}
         />
       );
+    }
 
     case "shape":
       if (!payload) {
@@ -109,6 +159,7 @@ export default function Home() {
           payload={payload}
           colorCode={colorCode}
           shapeCode={shapeCode}
+          mcqAnswers={mcqAnswers}
           onSuccess={() => setStage("success")}
         />
       );

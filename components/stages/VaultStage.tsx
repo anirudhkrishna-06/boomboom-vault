@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { StageShell } from "../StageShell";
+import { McqAnswer, McqGate } from "@/lib/mcq/questions";
 import { combineCipherCodes, deriveColorCode, deriveShapeCode } from "@/lib/qr/cipher";
 import { ParsedPayload } from "@/lib/qr/parser";
 
@@ -13,12 +14,14 @@ export function VaultStage({
   payload,
   colorCode,
   shapeCode,
+  mcqAnswers,
   onSuccess,
 }: {
   chitCode: string;
   payload: ParsedPayload | null;
   colorCode: string;
   shapeCode: string;
+  mcqAnswers: Partial<Record<McqGate, McqAnswer>>;
   onSuccess: () => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -59,6 +62,11 @@ export function VaultStage({
   const finalPreview = combineCipherCodes(resolvedColorCode, resolvedShapeCode, order);
   const boxCount = Math.max(MIN_BOXES, value.length);
   const boxes = Array.from({ length: boxCount }, (_, i) => value[i] ?? "");
+  const mcqRows = [
+    { gate: "color" as const, label: "Color MCQ", answer: mcqAnswers.color },
+    { gate: "shape" as const, label: "Shape MCQ", answer: mcqAnswers.shape },
+  ];
+  const mcqScore = mcqRows.filter((row) => row.answer?.isCorrect).length;
 
   return (
     <StageShell railStage="vault">
@@ -85,7 +93,24 @@ export function VaultStage({
           <span>Order</span>
           <strong className="mono">{order.join(" + ")}</strong>
         </div>
-        
+      </div>
+
+      <div className="panel mcq-review">
+        <div className="mcq-review-head">
+          <span className="field-label">MCQ marks</span>
+          <strong className="mono">{mcqScore}/2</strong>
+        </div>
+        {mcqRows.map((row) => (
+          <div className="mcq-review-row" key={row.gate}>
+            <div>
+              <span className="mono">{row.label}</span>
+              <p>{row.answer?.selectedOption ?? "No answer recorded"}</p>
+            </div>
+            <strong className={row.answer?.isCorrect ? "mcq-correct" : "mcq-wrong"}>
+              {row.answer ? (row.answer.isCorrect ? "CORRECT" : "WRONG") : "MISSING"}
+            </strong>
+          </div>
+        ))}
       </div>
 
       <div className="vault-input-wrap" onClick={() => inputRef.current?.focus()} style={{ marginBottom: 8 }}>

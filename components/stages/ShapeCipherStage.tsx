@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { StageShell } from "../StageShell";
 import { buildObfuscatedDisplayEntries, deriveChitOffsetKey } from "@/lib/cipher/obfuscation";
-import { deriveShapeCode } from "@/lib/qr/cipher";
 import { ParsedPayload } from "@/lib/qr/parser";
 
 const SHAPE_ICON: Record<string, string> = {
@@ -32,8 +31,7 @@ export function ShapeCipherStage({
   savedAnswer: string;
   onContinue: (workingAnswer: string) => void;
 }) {
-  const derivedCode = deriveShapeCode(payload);
-  const [answer, setAnswer] = useState(savedAnswer || derivedCode);
+  const [answer, setAnswer] = useState(savedAnswer);
   const offsetKey = deriveChitOffsetKey(payload.chitCode);
   const shapeEntries = buildObfuscatedDisplayEntries({
     map: payload.shapeMap,
@@ -58,7 +56,6 @@ export function ShapeCipherStage({
       </div>
 
       <div className="panel cipher-legend">
-        <p className="mono">CHIT KEY: {offsetKey}</p>
         <p>
           Add the digits in your chit code, keep the last digit, then subtract that key from each
           displayed table digit. Only shapes in the sequence build the code.

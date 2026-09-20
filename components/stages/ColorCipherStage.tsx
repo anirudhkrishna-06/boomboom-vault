@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { StageShell } from "../StageShell";
 import { buildObfuscatedDisplayEntries, deriveChitOffsetKey } from "@/lib/cipher/obfuscation";
-import { deriveColorCode } from "@/lib/qr/cipher";
 import { ParsedPayload } from "@/lib/qr/parser";
 
 const SWATCH: Record<string, string> = {
@@ -45,8 +44,7 @@ export function ColorCipherStage({
   savedAnswer: string;
   onContinue: (workingAnswer: string) => void;
 }) {
-  const derivedCode = deriveColorCode(payload);
-  const [answer, setAnswer] = useState(savedAnswer || derivedCode);
+  const [answer, setAnswer] = useState(savedAnswer);
   const offsetKey = deriveChitOffsetKey(payload.chitCode);
   const colorEntries = buildObfuscatedDisplayEntries({
     map: payload.colorMap,
@@ -66,7 +64,6 @@ export function ColorCipherStage({
       <p className="stage-sub">Match each color to its digit, then work through the sequence.</p>
 
       <div className="panel cipher-legend">
-        <p className="mono">CHIT KEY: {offsetKey}</p>
         <p>
           Add the digits in your chit code, keep the last digit, then subtract that key from each
           displayed table digit. Only colors in the sequence build the code.
