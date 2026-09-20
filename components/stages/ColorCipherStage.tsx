@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { StageShell } from "../StageShell";
+import { buildObfuscatedDisplayEntries, deriveChitOffsetKey } from "@/lib/cipher/obfuscation";
 import { deriveColorCode } from "@/lib/qr/cipher";
 import { ParsedPayload } from "@/lib/qr/parser";
 
@@ -14,7 +15,26 @@ const SWATCH: Record<string, string> = {
   MAGENTA: "#d15fd6",
   ORANGE: "#e2914f",
   PURPLE: "#9d6fe0",
+  LIME: "#9bd94a",
+  PINK: "#f07ab8",
+  TEAL: "#3fb9ad",
+  BROWN: "#9a6a3a",
+  WHITE: "#e8e8df",
+  BLACK: "#242424",
+  MAROON: "#8b2d3b",
+  NAVY: "#253f78",
 };
+
+const COLOR_DISTRACTORS = [
+  "LIME",
+  "PINK",
+  "TEAL",
+  "BROWN",
+  "WHITE",
+  "BLACK",
+  "MAROON",
+  "NAVY",
+];
 
 export function ColorCipherStage({
   payload,
@@ -27,7 +47,14 @@ export function ColorCipherStage({
 }) {
   const derivedCode = deriveColorCode(payload);
   const [answer, setAnswer] = useState(savedAnswer || derivedCode);
-  const colorEntries = Object.entries(payload.colorMap);
+  const offsetKey = deriveChitOffsetKey(payload.chitCode);
+  const colorEntries = buildObfuscatedDisplayEntries({
+    map: payload.colorMap,
+    sequence: payload.colorSequence,
+    candidates: COLOR_DISTRACTORS,
+    chitCode: payload.chitCode,
+    namespace: "color",
+  });
 
   return (
     <StageShell railStage="color">
@@ -38,14 +65,22 @@ export function ColorCipherStage({
       <h2 className="stage-title">Color cipher</h2>
       <p className="stage-sub">Match each color to its digit, then work through the sequence.</p>
 
+      <div className="panel cipher-legend">
+        <p className="mono">CHIT KEY: {offsetKey}</p>
+        <p>
+          Add the digits in your chit code, keep the last digit, then subtract that key from each
+          displayed table digit. Only colors in the sequence build the code.
+        </p>
+      </div>
+
       <div className="cipher-grid">
-        {colorEntries.map(([name, num]) => (
-          <div className="cipher-row-pair" key={name} style={{ display: "contents" }}>
+        {colorEntries.map((entry) => (
+          <div className="cipher-row-pair" key={entry.name} style={{ display: "contents" }}>
             <div className="cipher-cell">
-              <span className="swatch" style={{ background: SWATCH[name] ?? "#666" }} />
-              {name}
+              <span className="swatch" style={{ background: SWATCH[entry.name] ?? "#666" }} />
+              {entry.name}
             </div>
-            <div className="cipher-cell num">{num}</div>
+            <div className="cipher-cell num">{entry.displayDigit}</div>
           </div>
         ))}
       </div>
