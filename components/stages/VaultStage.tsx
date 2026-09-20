@@ -11,6 +11,7 @@ const MIN_BOXES = 8;
 
 export function VaultStage({
   chitCode,
+  teamName,
   payload,
   colorCode,
   shapeCode,
@@ -18,6 +19,7 @@ export function VaultStage({
   onSuccess,
 }: {
   chitCode: string;
+  teamName: string;
   payload: ParsedPayload | null;
   colorCode: string;
   shapeCode: string;
@@ -36,11 +38,22 @@ export function VaultStage({
     setDenied(false);
     setError(null);
 
+    const mcqRows = [
+      { gate: "color" as const, label: "Color MCQ", answer: mcqAnswers.color },
+      { gate: "shape" as const, label: "Shape MCQ", answer: mcqAnswers.shape },
+    ];
+    const mcqScore = mcqRows.filter((row) => row.answer?.isCorrect).length;
+
     try {
       const res = await fetch("/api/validate-vault", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chitCode, enteredVaultCode: value.trim() }),
+        body: JSON.stringify({
+          chitCode,
+          teamName,
+          enteredVaultCode: value.trim(),
+          mcqScore,
+        }),
       });
       const data = await res.json();
 
@@ -62,11 +75,6 @@ export function VaultStage({
   const finalPreview = combineCipherCodes(resolvedColorCode, resolvedShapeCode, order);
   const boxCount = Math.max(MIN_BOXES, value.length);
   const boxes = Array.from({ length: boxCount }, (_, i) => value[i] ?? "");
-  const mcqRows = [
-    { gate: "color" as const, label: "Color MCQ", answer: mcqAnswers.color },
-    { gate: "shape" as const, label: "Shape MCQ", answer: mcqAnswers.shape },
-  ];
-  const mcqScore = mcqRows.filter((row) => row.answer?.isCorrect).length;
 
   return (
     <StageShell railStage="vault">
@@ -93,24 +101,6 @@ export function VaultStage({
           <span>Order</span>
           <strong className="mono">{order.join(" + ")}</strong>
         </div>
-      </div>
-
-      <div className="panel mcq-review">
-        <div className="mcq-review-head">
-          <span className="field-label">MCQ marks</span>
-          <strong className="mono">{mcqScore}/2</strong>
-        </div>
-        {mcqRows.map((row) => (
-          <div className="mcq-review-row" key={row.gate}>
-            <div>
-              <span className="mono">{row.label}</span>
-              <p>{row.answer?.selectedOption ?? "No answer recorded"}</p>
-            </div>
-            <strong className={row.answer?.isCorrect ? "mcq-correct" : "mcq-wrong"}>
-              {row.answer ? (row.answer.isCorrect ? "CORRECT" : "WRONG") : "MISSING"}
-            </strong>
-          </div>
-        ))}
       </div>
 
       <div className="vault-input-wrap" onClick={() => inputRef.current?.focus()} style={{ marginBottom: 8 }}>

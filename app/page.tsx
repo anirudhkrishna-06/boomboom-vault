@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChitStage } from "@/components/stages/ChitStage";
 import { FindQRStage } from "@/components/stages/FindQRStage";
 import { ScanQRStage } from "@/components/stages/ScanQRStage";
@@ -28,18 +28,26 @@ type Stage =
 export default function Home() {
   const [stage, setStage] = useState<Stage>("chit");
   const [chitCode, setChitCode] = useState("");
+  const [teamName, setTeamName] = useState("");
   const [capturedFile, setCapturedFile] = useState<File | null>(null);
   const [payload, setPayload] = useState<ParsedPayload | null>(null);
   const [colorCode, setColorCode] = useState("");
   const [shapeCode, setShapeCode] = useState("");
   const [mcqAnswers, setMcqAnswers] = useState<Partial<Record<"color" | "shape", McqAnswer>>>({});
 
+  useEffect(() => {
+    const stored = localStorage.getItem("teamName");
+    if (stored) setTeamName(stored);
+  }, []);
+
   switch (stage) {
     case "chit":
       return (
         <ChitStage
-          onValid={(code) => {
+          onValid={(code, team) => {
             setChitCode(code);
+            setTeamName(team);
+            localStorage.setItem("teamName", team);
             setStage("find");
           }}
         />
@@ -156,6 +164,7 @@ export default function Home() {
       return (
         <VaultStage
           chitCode={chitCode}
+          teamName={teamName}
           payload={payload}
           colorCode={colorCode}
           shapeCode={shapeCode}
@@ -165,7 +174,8 @@ export default function Home() {
       );
 
     case "success":
-      return <SuccessStage chitCode={chitCode} />;
+      return <SuccessStage chitCode={chitCode} teamName={teamName} mcqAnswers={mcqAnswers} />
+
 
     default:
       return null;

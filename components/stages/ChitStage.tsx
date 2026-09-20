@@ -1,21 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { StageShell } from "../StageShell";
 
 export function ChitStage({
   onValid,
 }: {
-  onValid: (chitCode: string) => void;
+  onValid: (chitCode: string, teamName: string) => void;
 }) {
-  const [value, setValue] = useState("");
+  const [chitValue, setChitValue] = useState("");
+  const [teamValue, setTeamValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    const stored = localStorage.getItem("teamName");
+    if (stored) setTeamValue(stored);
+  }, []);
+
   async function handleContinue() {
-    const code = value.trim().toUpperCase();
+    const code = chitValue.trim().toUpperCase();
+    const teamName = teamValue.trim();
+
     if (!code) {
       setError("Enter the code printed on your chit.");
+      return;
+    }
+    if (!teamName) {
+      setError("Enter your team name.");
       return;
     }
 
@@ -31,7 +43,8 @@ export function ChitStage({
       const data = await res.json();
 
       if (data.valid) {
-        onValid(code);
+        localStorage.setItem("teamName", teamName);
+        onValid(code, teamName);
       } else {
         setError("That chit code wasn't recognized. Check it and try again.");
       }
@@ -67,24 +80,44 @@ export function ChitStage({
           </p>
         </div>
 
-        <div style={{ width: "100%" }}>
-          <span className="field-label">Enter chit code</span>
-          <input
-            className={`input ${error ? "error" : ""}`}
-            placeholder="BB117"
-            value={value}
-            autoCapitalize="characters"
-            autoCorrect="off"
-            spellCheck={false}
-            onChange={(e) => {
-              setValue(e.target.value);
-              if (error) setError(null);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleContinue();
-            }}
-            inputMode="text"
-          />
+        <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 16 }}>
+          <div>
+            <span className="field-label">Enter chit code</span>
+            <input
+              className={`input ${error ? "error" : ""}`}
+              placeholder="BB117"
+              value={chitValue}
+              autoCapitalize="characters"
+              autoCorrect="off"
+              spellCheck={false}
+              onChange={(e) => {
+                setChitValue(e.target.value);
+                if (error) setError(null);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleContinue();
+              }}
+              inputMode="text"
+            />
+          </div>
+          <div>
+            <span className="field-label">Team name</span>
+            <input
+              className={`input ${error ? "error" : ""}`}
+              placeholder="Your team name"
+              value={teamValue}
+              autoCorrect="off"
+              spellCheck={false}
+              onChange={(e) => {
+                setTeamValue(e.target.value);
+                if (error) setError(null);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleContinue();
+              }}
+              inputMode="text"
+            />
+          </div>
           {error && <p className="error-text">{error}</p>}
         </div>
       </div>
