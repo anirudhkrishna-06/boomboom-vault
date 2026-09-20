@@ -564,6 +564,67 @@ a {
 
 /* Slider ---------------------------------------------------------------- */
 
+.adjuster-panel {
+  margin-bottom: 18px;
+}
+
+.preview-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--border);
+  margin-bottom: 18px;
+}
+
+.preview-toggle button {
+  appearance: none;
+  border: none;
+  background: var(--surface);
+  color: var(--text-muted);
+  min-height: 40px;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.preview-toggle button.active {
+  background: var(--brass-soft);
+  color: var(--brass);
+}
+
+.signal-readout {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.signal-meter {
+  height: 8px;
+  border-radius: 99px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.signal-meter span {
+  display: block;
+  height: 100%;
+  min-width: 2px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--brass), var(--signal));
+  transition: width 0.18s ease;
+}
+
+.signal-score {
+  color: var(--brass);
+  font-size: 13px;
+  padding-bottom: 1px;
+}
+
 .slider-row {
   margin-bottom: 20px;
 }
@@ -704,9 +765,10 @@ input[type="range"]::-moz-range-thumb {
 
 .shape-icon {
   font-size: 15px;
-  width: 18px;
+  width: 24px;
   text-align: center;
   color: var(--text-muted);
+  font-family: var(--font-mono);
 }
 
 .sequence-row {
@@ -768,6 +830,42 @@ input[type="range"]::-moz-range-thumb {
 
 .vault-input-wrap {
   position: relative;
+}
+
+.vault-summary {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.code-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 12px 14px;
+}
+
+.code-strip span {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.code-strip strong {
+  color: var(--brass);
+  font-size: 16px;
+  letter-spacing: 0.08em;
+}
+
+.code-strip.emphasis {
+  border-color: var(--brass-line);
+  background: var(--brass-soft);
 }
 
 /* Success ------------------------------------------------------------------ */

@@ -18,6 +18,8 @@ export default function Home() {
   const [chitCode, setChitCode] = useState("");
   const [capturedFile, setCapturedFile] = useState<File | null>(null);
   const [payload, setPayload] = useState<ParsedPayload | null>(null);
+  const [colorCode, setColorCode] = useState("");
+  const [shapeCode, setShapeCode] = useState("");
 
   switch (stage) {
     case "chit":
@@ -56,6 +58,8 @@ export default function Home() {
           onDecoded={(parsed) => {
             if (!parsed) return;
             setPayload(parsed);
+            setColorCode("");
+            setShapeCode("");
             setStage("color");
           }}
           onRetake={() => {
@@ -70,17 +74,44 @@ export default function Home() {
         setStage("adjust");
         return null;
       }
-      return <ColorCipherStage payload={payload} onContinue={() => setStage("shape")} />;
+      return (
+        <ColorCipherStage
+          payload={payload}
+          savedAnswer={colorCode}
+          onContinue={(answer) => {
+            setColorCode(answer);
+            setStage("shape");
+          }}
+        />
+      );
 
     case "shape":
       if (!payload) {
         setStage("adjust");
         return null;
       }
-      return <ShapeCipherStage payload={payload} onContinue={() => setStage("vault")} />;
+      return (
+        <ShapeCipherStage
+          payload={payload}
+          colorCode={colorCode}
+          savedAnswer={shapeCode}
+          onContinue={(answer) => {
+            setShapeCode(answer);
+            setStage("vault");
+          }}
+        />
+      );
 
     case "vault":
-      return <VaultStage chitCode={chitCode} onSuccess={() => setStage("success")} />;
+      return (
+        <VaultStage
+          chitCode={chitCode}
+          payload={payload}
+          colorCode={colorCode}
+          shapeCode={shapeCode}
+          onSuccess={() => setStage("success")}
+        />
+      );
 
     case "success":
       return <SuccessStage chitCode={chitCode} />;

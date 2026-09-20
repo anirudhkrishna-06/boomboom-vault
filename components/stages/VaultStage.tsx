@@ -2,15 +2,23 @@
 
 import { useRef, useState } from "react";
 import { StageShell } from "../StageShell";
+import { combineCipherCodes, deriveColorCode, deriveShapeCode } from "@/lib/qr/cipher";
+import { ParsedPayload } from "@/lib/qr/parser";
 
 const MAX_LEN = 8;
 const MIN_BOXES = 8;
 
 export function VaultStage({
   chitCode,
+  payload,
+  colorCode,
+  shapeCode,
   onSuccess,
 }: {
   chitCode: string;
+  payload: ParsedPayload | null;
+  colorCode: string;
+  shapeCode: string;
   onSuccess: () => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -45,6 +53,10 @@ export function VaultStage({
     }
   }
 
+  const resolvedColorCode = colorCode || (payload ? deriveColorCode(payload) : "");
+  const resolvedShapeCode = shapeCode || (payload ? deriveShapeCode(payload) : "");
+  const order = payload?.operationOrder?.length ? payload.operationOrder : ["COLOR", "SHAPE"];
+  const finalPreview = combineCipherCodes(resolvedColorCode, resolvedShapeCode, order);
   const boxCount = Math.max(MIN_BOXES, value.length);
   const boxes = Array.from({ length: boxCount }, (_, i) => value[i] ?? "");
 
@@ -60,11 +72,23 @@ export function VaultStage({
         final code.
       </p>
 
-      <div
-        className="vault-input-wrap"
-        onClick={() => inputRef.current?.focus()}
-        style={{ marginBottom: 8 }}
-      >
+      <div className="vault-summary">
+        <div className="code-strip">
+          <span>Color code</span>
+          <strong className="mono">{resolvedColorCode || "----"}</strong>
+        </div>
+        <div className="code-strip">
+          <span>Shape code</span>
+          <strong className="mono">{resolvedShapeCode || "----"}</strong>
+        </div>
+        <div className="code-strip emphasis">
+          <span>Order</span>
+          <strong className="mono">{order.join(" + ")}</strong>
+        </div>
+        
+      </div>
+
+      <div className="vault-input-wrap" onClick={() => inputRef.current?.focus()} style={{ marginBottom: 8 }}>
         <div className="vault-boxes">
           {boxes.map((ch, i) => (
             <div className={`vault-box ${ch ? "filled" : ""}`} key={i}>
@@ -104,7 +128,7 @@ export function VaultStage({
 
       <div className="stage-footer">
         <button className="btn btn-primary" onClick={submit} disabled={submitting || !value}>
-          {submitting ? "Unlocking…" : "Unlock"}
+          {submitting ? "Unlocking..." : "Unlock"}
         </button>
       </div>
     </StageShell>

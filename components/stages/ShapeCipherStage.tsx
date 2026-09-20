@@ -2,23 +2,29 @@
 
 import { useState } from "react";
 import { StageShell } from "../StageShell";
+import { deriveShapeCode } from "@/lib/qr/cipher";
 import { ParsedPayload } from "@/lib/qr/parser";
 
 const SHAPE_ICON: Record<string, string> = {
-  CIRCLE: "○",
-  TRIANGLE: "△",
-  SQUARE: "□",
-  DIAMOND: "◇",
+  CIRCLE: "O",
+  TRIANGLE: "^",
+  SQUARE: "[]",
+  DIAMOND: "<>",
 };
 
 export function ShapeCipherStage({
   payload,
+  colorCode,
+  savedAnswer,
   onContinue,
 }: {
   payload: ParsedPayload;
+  colorCode: string;
+  savedAnswer: string;
   onContinue: (workingAnswer: string) => void;
 }) {
-  const [answer, setAnswer] = useState("");
+  const derivedCode = deriveShapeCode(payload);
+  const [answer, setAnswer] = useState(savedAnswer || derivedCode);
   const shapeEntries = Object.entries(payload.shapeMap);
 
   return (
@@ -29,6 +35,11 @@ export function ShapeCipherStage({
       </div>
       <h2 className="stage-title">Shape cipher</h2>
       <p className="stage-sub">Match each shape to its digit, then work through the sequence.</p>
+
+      <div className="code-strip" style={{ marginBottom: 16 }}>
+        <span>Color code</span>
+        <strong className="mono">{colorCode || "----"}</strong>
+      </div>
 
       <div className="cipher-grid">
         {shapeEntries.map(([name, num]) => (
@@ -46,26 +57,25 @@ export function ShapeCipherStage({
       <div className="sequence-row" style={{ marginBottom: 26 }}>
         {payload.shapeSequence.map((s, i) => (
           <span key={i} style={{ display: "contents" }}>
-            <span className="sequence-chip">
-              {SHAPE_ICON[s] ? `${SHAPE_ICON[s]} ${s}` : s}
-            </span>
-            {i < payload.shapeSequence.length - 1 && <span className="sequence-arrow">→</span>}
+            <span className="sequence-chip">{SHAPE_ICON[s] ? `${SHAPE_ICON[s]} ${s}` : s}</span>
+            {i < payload.shapeSequence.length - 1 && <span className="sequence-arrow">-&gt;</span>}
           </span>
         ))}
       </div>
 
-      <span className="field-label">Your working (optional)</span>
+      <span className="field-label">Shape code</span>
       <input
         className="input"
         placeholder="e.g. 8713"
         value={answer}
-        onChange={(e) => setAnswer(e.target.value)}
+        inputMode="numeric"
+        onChange={(e) => setAnswer(e.target.value.replace(/[^0-9]/g, ""))}
         style={{ fontSize: 18, marginBottom: 4 }}
       />
 
       <div className="stage-footer">
-        <button className="btn btn-primary" onClick={() => onContinue(answer)}>
-          Continue →
+        <button className="btn btn-primary" onClick={() => onContinue(answer || derivedCode)}>
+          Continue -&gt;
         </button>
       </div>
     </StageShell>

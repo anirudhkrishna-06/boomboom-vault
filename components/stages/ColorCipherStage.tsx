@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { StageShell } from "../StageShell";
+import { deriveColorCode } from "@/lib/qr/cipher";
 import { ParsedPayload } from "@/lib/qr/parser";
 
 const SWATCH: Record<string, string> = {
@@ -17,12 +18,15 @@ const SWATCH: Record<string, string> = {
 
 export function ColorCipherStage({
   payload,
+  savedAnswer,
   onContinue,
 }: {
   payload: ParsedPayload;
+  savedAnswer: string;
   onContinue: (workingAnswer: string) => void;
 }) {
-  const [answer, setAnswer] = useState("");
+  const derivedCode = deriveColorCode(payload);
+  const [answer, setAnswer] = useState(savedAnswer || derivedCode);
   const colorEntries = Object.entries(payload.colorMap);
 
   return (
@@ -51,23 +55,24 @@ export function ColorCipherStage({
         {payload.colorSequence.map((c, i) => (
           <span key={i} style={{ display: "contents" }}>
             <span className="sequence-chip">{c}</span>
-            {i < payload.colorSequence.length - 1 && <span className="sequence-arrow">→</span>}
+            {i < payload.colorSequence.length - 1 && <span className="sequence-arrow">-&gt;</span>}
           </span>
         ))}
       </div>
 
-      <span className="field-label">Your working (optional)</span>
+      <span className="field-label">Color code</span>
       <input
         className="input"
         placeholder="e.g. 5921"
         value={answer}
-        onChange={(e) => setAnswer(e.target.value)}
+        inputMode="numeric"
+        onChange={(e) => setAnswer(e.target.value.replace(/[^0-9]/g, ""))}
         style={{ fontSize: 18, marginBottom: 4 }}
       />
 
       <div className="stage-footer">
-        <button className="btn btn-primary" onClick={() => onContinue(answer)}>
-          Continue →
+        <button className="btn btn-primary" onClick={() => onContinue(answer || derivedCode)}>
+          Continue -&gt;
         </button>
       </div>
     </StageShell>

@@ -5,15 +5,12 @@ import {
   HsvThresholds,
   S_SEARCH_RANGE,
   V_SEARCH_RANGE,
-  continuousProximity,
-  isWithinTargetWindows,
-  maskClarity,
+  computeClarity,
   maskCoverage,
   maskToImageData,
   morphologicalCleanup,
   renderHsvDissolveImageData,
   thresholdMask,
-  thresholdProximity,
   toHsvBuffers,
 } from "./hsv";
 import { parsePayload } from "./parser";
@@ -59,11 +56,10 @@ function tryDecodeMask(
   thresholds: HsvThresholds
 ): { mask: ReturnType<typeof thresholdMask>; ratio: number; payload: string | null } {
   let mask = thresholdMask(buffers, thresholds);
-  mask = morphologicalCleanup(mask, buffers.width, buffers.height);
+  mask = morphologicalCleanup(mask, buffers.width, buffers.height, thresholds.cleanupPasses ?? 1);
   const ratio = maskCoverage(mask);
 
-  // Require BOTH sMax and vMax to be in target windows before decoding
-  if (!isWithinTargetWindows(thresholds) || ratio < 0.003 || ratio > 0.55) {
+  if (ratio < 0.003 || ratio > 0.55) {
     return { mask, ratio, payload: null };
   }
 
@@ -80,6 +76,22 @@ function tryDecodeMask(
   return { mask, ratio, payload: null };
 }
 
+/** Builds the live recovery preview without attempting to decode the QR. */
+export function renderAdjustmentPreview(
+  buffers: HsvBuffers,
+  thresholds: HsvThresholds = DEFAULT_THRESHOLDS
+): Omit<DecodeAttemptResult, "success" | "payload"> {
+  let mask = thresholdMask(buffers, thresholds);
+  mask = morphologicalCleanup(mask, buffers.width, buffers.height, thresholds.cleanupPasses ?? 1);
+  const clarity = computeClarity(mask, thresholds);
+
+  return {
+    mask: maskToImageData(mask, buffers.width, buffers.height),
+    renderedFrame: renderHsvDissolveImageData(buffers, thresholds, mask),
+    clarity,
+  };
+}
+
 
 /** Attempts a single decode at the given thresholds. Used for the live preview + manual "Detect" action. */
 export function attemptDecode(
@@ -87,11 +99,9 @@ export function attemptDecode(
   thresholds: HsvThresholds = DEFAULT_THRESHOLDS
 ): DecodeAttemptResult {
   const { mask, payload } = tryDecodeMask(buffers, thresholds);
-  const densityClarity = maskClarity(mask);
-  const proximity = continuousProximity(thresholds.sMax, thresholds.vMax);
-  const clarity = payload ? 1.0 : Math.min(1, densityClarity * 0.3 + proximity * 0.7);
+  const clarity = payload ? 1.0 : computeClarity(mask, thresholds);
 
-  const renderedFrame = renderHsvDissolveImageData(buffers, thresholds);
+  const renderedFrame = renderHsvDissolveImageData(buffers, thresholds, mask);
 
   return {
     success: !!payload,

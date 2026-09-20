@@ -15,6 +15,7 @@ export interface HsvThresholds {
   hMax: number; // 0-179
   sMax: number; // 0-255 (keep only LOW saturation, i.e. s <= sMax)
   vMax: number; // 0-255 (keep only LOW value, i.e. v <= vMax)
+  cleanupPasses?: number; // 0-3, extra open/close passes for noisy photos
 }
 
 export const DEFAULT_THRESHOLDS: HsvThresholds = {
@@ -78,7 +79,8 @@ export function toHsvBuffers(imageData: ImageData): HsvBuffers {
  */
 export function renderHsvDissolveImageData(
   buffers: HsvBuffers,
-  t: HsvThresholds
+  t: HsvThresholds,
+  cleanedMask?: Uint8ClampedArray
 ): ImageData {
   const { width, height, s, v, rgba } = buffers;
   const n = width * height;
@@ -92,7 +94,7 @@ export function renderHsvDissolveImageData(
     const hueVal = buffers.h[i];
 
     const hueOk = wrap ? hueVal >= t.hMin || hueVal <= t.hMax : hueVal >= t.hMin && hueVal <= t.hMax;
-    const isSignal = hueOk && sVal <= t.sMax && vVal <= t.vMax;
+    const isSignal = cleanedMask ? cleanedMask[i] !== 0 : hueOk && sVal <= t.sMax && vVal <= t.vMax;
 
     if (isSignal) {
       // Keep QR module pixel dark & crisp
@@ -186,12 +188,17 @@ function dilate3x3(src: Uint8ClampedArray, width: number, height: number): Uint8
 export function morphologicalCleanup(
   mask: Uint8ClampedArray,
   width: number,
-  height: number
+  height: number,
+  passes = 1
 ): Uint8ClampedArray {
-  let m = erode3x3(mask, width, height);
-  m = dilate3x3(m, width, height); // open
-  m = dilate3x3(m, width, height);
-  m = erode3x3(m, width, height); // close
+  let m = mask;
+  const totalPasses = Math.max(0, Math.min(3, Math.round(passes)));
+  for (let i = 0; i < totalPasses; i++) {
+    m = erode3x3(m, width, height);
+    m = dilate3x3(m, width, height); // open
+    m = dilate3x3(m, width, height);
+    m = erode3x3(m, width, height); // close
+  }
   return m;
 }
 
@@ -208,6 +215,14 @@ export function maskClarity(mask: Uint8ClampedArray): number {
   if (coverage < 0.03 || coverage > 0.60) return 0;
   const coverageScore = 1 - Math.abs(coverage - 0.18) / 0.18;
   return Math.max(0, Math.min(1, coverageScore));
+}
+
+/** Shared 0-1 readout used by both live preview and explicit decode checks. */
+export function computeClarity(mask: Uint8ClampedArray, thresholds: HsvThresholds): number {
+  const densityClarity = maskClarity(mask);
+  const proximity = continuousProximity(thresholds.sMax, thresholds.vMax);
+  const targetWindowBonus = isWithinTargetWindows(thresholds) ? 0.12 : 0;
+  return Math.min(1, densityClarity * 0.55 + proximity * 0.33 + targetWindowBonus);
 }
 
 /** Measures how close current thresholds are to target thresholds (default sMax=130, vMax=180). */
