@@ -20,13 +20,20 @@ const GATE_COPY: Record<McqGate, { stage: string; title: string; railStage: "col
 export function MCQStage({
   gate,
   question,
+  savedAnswer,
+  onBack,
   onContinue,
 }: {
   gate: McqGate;
   question: McqQuestion;
+  savedAnswer?: McqAnswer;
+  onBack?: () => void;
   onContinue: (answer: McqAnswer) => void;
 }) {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const savedIndex = savedAnswer
+    ? question.options.findIndex((option) => option === savedAnswer.selectedOption)
+    : -1;
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(savedIndex >= 0 ? savedIndex : null);
   const copy = GATE_COPY[gate];
 
   function submit() {
@@ -72,6 +79,11 @@ export function MCQStage({
       </div>
 
       <div className="stage-footer">
+        {onBack && (
+          <button className="btn btn-ghost" type="button" onClick={onBack}>
+            &lt;- Back
+          </button>
+        )}
         <button className="btn btn-primary" onClick={submit} disabled={selectedIndex === null}>
           Submit -&gt;
         </button>
