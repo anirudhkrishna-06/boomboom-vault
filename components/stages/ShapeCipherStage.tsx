@@ -24,11 +24,13 @@ export function ShapeCipherStage({
   payload,
   colorCode,
   savedAnswer,
+  onBack,
   onContinue,
 }: {
   payload: ParsedPayload;
   colorCode: string;
   savedAnswer: string;
+  onBack: () => void;
   onContinue: (workingAnswer: string) => void;
 }) {
   const [answer, setAnswer] = useState(savedAnswer);
@@ -57,8 +59,8 @@ export function ShapeCipherStage({
 
       <div className="panel cipher-legend">
         <p>
-          Add the digits in your chit code, keep the last digit, then subtract that key from each
-          displayed table digit. Only shapes in the sequence build the code.
+          Use only the number part. For BB117, use 117. Add its digits, keep the last digit, That's your KEY. For each row: Do the following, Number shown against the shape 'minus' The Key you just found, mod 10. If negative, add 10.
+
         </p>
       </div>
 
@@ -95,6 +97,9 @@ export function ShapeCipherStage({
       />
 
       <div className="stage-footer">
+        <button className="btn btn-ghost" type="button" onClick={onBack}>
+          &lt;- Back
+        </button>
         <button
           className="btn btn-primary"
           onClick={() => onContinue(answer)}

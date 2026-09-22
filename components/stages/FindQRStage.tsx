@@ -17,8 +17,7 @@ export function FindQRStage({
       </div>
       <h2 className="stage-title">Find the QR</h2>
       <p className="stage-sub">
-        Follow the clue printed on your chit. It leads to a camouflaged QR — it won't look like
-        an ordinary QR code, so look carefully.
+        Follow the clue printed on your chit.
       </p>
 
       <div className="panel" style={{ marginBottom: 0 }}>
@@ -36,7 +35,7 @@ export function FindQRStage({
               02
             </span>
             <p style={{ fontSize: 14, color: "var(--text-muted)", lineHeight: 1.6 }}>
-              The QR is blended into its surroundings. It won't jump out — that's intentional.
+              Open the link given in the treasure chit, it will automatically download you a QR. Come back here to continue
             </p>
           </div>
           <div className="row" style={{ alignItems: "flex-start" }}>
@@ -44,7 +43,7 @@ export function FindQRStage({
               03
             </span>
             <p style={{ fontSize: 14, color: "var(--text-muted)", lineHeight: 1.6 }}>
-              Once you've found it, bring it fully into view and continue.
+              Upload the digital morphed QR to continue
             </p>
           </div>
         </div>

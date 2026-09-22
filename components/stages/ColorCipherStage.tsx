@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { StageShell } from "../StageShell";
 import { buildObfuscatedDisplayEntries, deriveChitOffsetKey } from "@/lib/cipher/obfuscation";
+import { deriveColorCode } from "@/lib/qr/cipher";
 import { ParsedPayload } from "@/lib/qr/parser";
 
 const SWATCH: Record<string, string> = {
@@ -38,14 +39,18 @@ const COLOR_DISTRACTORS = [
 export function ColorCipherStage({
   payload,
   savedAnswer,
+  onBack,
   onContinue,
 }: {
   payload: ParsedPayload;
   savedAnswer: string;
+  onBack: () => void;
   onContinue: (workingAnswer: string) => void;
 }) {
   const [answer, setAnswer] = useState(savedAnswer);
+  const [error, setError] = useState("");
   const offsetKey = deriveChitOffsetKey(payload.chitCode);
+  const correctCode = deriveColorCode(payload);
   const colorEntries = buildObfuscatedDisplayEntries({
     map: payload.colorMap,
     sequence: payload.colorSequence,
@@ -53,6 +58,18 @@ export function ColorCipherStage({
     chitCode: payload.chitCode,
     namespace: "color",
   });
+
+  function submit() {
+    if (!answer.trim()) return;
+
+    if (answer.trim() !== correctCode) {
+      setError("That color code is not correct yet.");
+      return;
+    }
+
+    setError("");
+    onContinue(answer.trim());
+  }
 
   return (
     <StageShell railStage="color">
@@ -65,8 +82,7 @@ export function ColorCipherStage({
 
       <div className="panel cipher-legend">
         <p>
-          Add the digits in your chit code, keep the last digit, then subtract that key from each
-          displayed table digit. Only colors in the sequence build the code.
+          Use only the number part. For BB117, use 117. Add its digits, keep the last digit, That's your KEY. For each row: Do the following, Number shown against the color 'minus' The Key you just found, mod 10. If negative, add 10.
         </p>
       </div>
 
@@ -98,14 +114,21 @@ export function ColorCipherStage({
         placeholder="e.g. 5921"
         value={answer}
         inputMode="numeric"
-        onChange={(e) => setAnswer(e.target.value.replace(/[^0-9]/g, ""))}
+        onChange={(e) => {
+          setAnswer(e.target.value.replace(/[^0-9]/g, ""));
+          setError("");
+        }}
         style={{ fontSize: 18, marginBottom: 4 }}
       />
+      {error && <p className="error-text">{error}</p>}
 
       <div className="stage-footer">
+        <button className="btn btn-ghost" type="button" onClick={onBack}>
+          &lt;- Back
+        </button>
         <button
           className="btn btn-primary"
-          onClick={() => onContinue(answer)}
+          onClick={submit}
           disabled={answer.trim().length === 0}
         >
           Continue -&gt;

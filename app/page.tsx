@@ -101,6 +101,8 @@ export default function Home() {
         <MCQStage
           gate="color"
           question={question}
+          savedAnswer={mcqAnswers.color}
+          onBack={() => setStage("adjust")}
           onContinue={(answer) => {
             setMcqAnswers((current) => ({ ...current, color: answer }));
             setStage("color");
@@ -118,6 +120,7 @@ export default function Home() {
         <ColorCipherStage
           payload={payload}
           savedAnswer={colorCode}
+          onBack={() => setStage("colorMcq")}
           onContinue={(answer) => {
             setColorCode(answer);
             setStage("shapeMcq");
@@ -135,6 +138,8 @@ export default function Home() {
         <MCQStage
           gate="shape"
           question={question}
+          savedAnswer={mcqAnswers.shape}
+          onBack={() => setStage("color")}
           onContinue={(answer) => {
             setMcqAnswers((current) => ({ ...current, shape: answer }));
             setStage("shape");
@@ -153,6 +158,7 @@ export default function Home() {
           payload={payload}
           colorCode={colorCode}
           savedAnswer={shapeCode}
+          onBack={() => setStage("shapeMcq")}
           onContinue={(answer) => {
             setShapeCode(answer);
             setStage("vault");
