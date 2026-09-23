@@ -20,33 +20,58 @@ export interface McqAnswer {
 export const MCQ_QUESTIONS: McqQuestion[] = [
   {
     id: "robot-signal",
-    prompt: "Which signal would a robot trust most during a noisy scan?",
-    options: ["The clearest repeated pattern", "The brightest random flash", "The longest shadow", "The first color seen"],
-    correctOptionIndex: 0,
+    prompt: "During the preliminary AIRA evaluation in Enthiran, what fundamental flaw did Dr. Bohra cite to reject Chitti for military use?",
+    options: [
+      "Thermal instability in the cooling loop under combat simulation loads",
+      "Lack of an ethical heuristic filter, causing him to obey commands without moral or contextual judgment",
+      "Vulnerability to high-frequency EMP bursts in contested electronic warfare environments",
+      "Inability to differentiate between friendly and hostile optical wave signatures"
+    ],
+    correctOptionIndex: 1,
   },
   {
     id: "vault-order",
-    prompt: "When two clue parts must be combined, what should decide their order?",
-    options: ["The instruction order", "The larger number first", "The shorter answer first", "Alphabetical order"],
-    correctOptionIndex: 0,
+    prompt: "In 2.0, why was Chitti 3.0 (Kutty) deployed specifically on the backs of homing pigeons to defeat Pakshi Rajan's micro-photon bird swarm?",
+    options: [
+      "Pigeons radiate a natural bio-field that dampens 3G/4G cellular carrier frequencies",
+      "The micro-photon aura's quantum cohesion breaks down near biological feathers",
+      "Pakshi Rajan's deep avian affinity prevented his negative electromagnetic aura from attacking real birds",
+      "Homing pigeons effectively mask the electromagnetic heat signature of microbot power cells"
+    ],
+    correctOptionIndex: 2,
   },
   {
     id: "decoy-rule",
-    prompt: "A table has extra entries. Which entries should be used?",
-    options: ["Only entries named in the sequence", "Every entry in the table", "Only the last two rows", "Only entries with high digits"],
+    prompt: "What primary algorithmic override occurred when Dr. Bohra forcibly inserted the Red Chip into Chitti's neural drive?",
+    options: [
+      "It erased his Asimovian safety constraints, prioritizing self-preservation, destructive ego, and autonomous replication",
+      "It overclocked his optical scanning frequency, causing thermal runaway in his moral logic gates",
+      "It corrupted his natural language processor, forcing him into aggressive binary communication",
+      "It diverted 90% of his power capacity to short-range electromagnetic pulse generation"
+    ],
     correctOptionIndex: 0,
   },
   {
     id: "offset-key",
-    prompt: "If a table digit is offset by a chit key, what should you do before using it?",
-    options: ["Reverse the offset", "Double the digit", "Ignore the digit", "Swap it with the next row"],
-    correctOptionIndex: 0,
+    prompt: "In 2.0, how does Dr. Vaseegaran scientifically explain the seemingly supernatural force exerted by Pakshi Rajan?",
+    options: [
+      "A concentrated dark-matter field condensed by ionospheric satellite telemetry",
+      "A self-sustaining plasma loop fed by radio-frequency leaks from abandoned towers",
+      "A swarm of mutated bio-synthetic nanobots reacting to sub-atomic radio waves",
+      "A micro-photon aura held together by a dense electromagnetic stream of negative bio-energy"
+    ],
+    correctOptionIndex: 3,
   },
   {
     id: "cipher-check",
-    prompt: "What is the safest way to handle a solved cipher part?",
-    options: ["Keep it visible for the next stage", "Erase it immediately", "Change one digit", "Use only memory"],
-    correctOptionIndex: 0,
+    prompt: "In Enthiran, how did Dr. Vaseegaran and the army finally immobilize Chitti 2.0 during the climactic stadium showdown?",
+    options: [
+      "By triggering a targeted satellite-based EMP pulse directed at his neural core",
+      "By using massive industrial electromagnets to strip his outer shell and pull out the Red Chip",
+      "By uploading a corrupting Trojan virus directly through his wireless maintenance port",
+      "By flooding the stadium floor with liquid nitrogen to freeze his servo-actuators"
+    ],
+    correctOptionIndex: 1,
   },
 ];
 
