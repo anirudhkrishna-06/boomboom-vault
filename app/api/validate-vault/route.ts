@@ -9,6 +9,7 @@ export async function POST(req: NextRequest) {
     const chitCode = typeof body?.chitCode === "string" ? body.chitCode.trim() : "";
     const teamName = typeof body?.teamName === "string" ? body.teamName.trim() : "";
     const enteredVaultCode = typeof body?.enteredVaultCode === "string" ? body.enteredVaultCode.trim() : "";
+    const chitEnteredAtRaw = typeof body?.chitEnteredAt === "string" ? body.chitEnteredAt.trim() : "";
     const mcqScoreRaw = body?.mcqScore;
 
     if (!chitCode || !teamName) {
@@ -38,10 +39,31 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ correct: false });
     }
 
+    const chitEnteredAt = chitEnteredAtRaw ? new Date(chitEnteredAtRaw) : null;
+    const validChitEnteredAt = chitEnteredAt && !Number.isNaN(chitEnteredAt.getTime()) ? chitEnteredAt : null;
+    const unlockedAt = new Date();
+    const timeTakenSeconds = validChitEnteredAt
+      ? Math.max(0, Math.round((unlockedAt.getTime() - validChitEnteredAt.getTime()) / 1000))
+      : null;
+
     try {
       await pool.query(
-        `INSERT INTO vault_unlocks (chit_code, team_name, mcq_score) VALUES ($1, $2, $3)`,
-        [chitCode, teamName, mcqScore]
+        `INSERT INTO vault_unlocks (
+          chit_code,
+          team_name,
+          mcq_score,
+          chit_entered_at,
+          unlocked_at,
+          time_taken_seconds
+        ) VALUES ($1, $2, $3, $4, $5, $6)`,
+        [
+          chitCode,
+          teamName,
+          mcqScore,
+          validChitEnteredAt,
+          unlockedAt,
+          timeTakenSeconds,
+        ]
       );
     } catch (dbError) {
       console.error("Failed to log vault unlock:", dbError);

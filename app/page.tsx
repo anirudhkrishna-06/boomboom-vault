@@ -29,6 +29,7 @@ export default function Home() {
   const [stage, setStage] = useState<Stage>("chit");
   const [chitCode, setChitCode] = useState("");
   const [teamName, setTeamName] = useState("");
+  const [chitEnteredAt, setChitEnteredAt] = useState("");
   const [capturedFile, setCapturedFile] = useState<File | null>(null);
   const [payload, setPayload] = useState<ParsedPayload | null>(null);
   const [colorCode, setColorCode] = useState("");
@@ -44,9 +45,10 @@ export default function Home() {
     case "chit":
       return (
         <ChitStage
-          onValid={(code, team) => {
+          onValid={(code, team, enteredAt) => {
             setChitCode(code);
             setTeamName(team);
+            setChitEnteredAt(enteredAt);
             localStorage.setItem("teamName", team);
             setStage("find");
           }}
@@ -171,6 +173,7 @@ export default function Home() {
         <VaultStage
           chitCode={chitCode}
           teamName={teamName}
+          chitEnteredAt={chitEnteredAt}
           payload={payload}
           colorCode={colorCode}
           shapeCode={shapeCode}

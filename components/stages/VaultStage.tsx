@@ -12,6 +12,7 @@ const MIN_BOXES = 8;
 export function VaultStage({
   chitCode,
   teamName,
+  chitEnteredAt,
   payload,
   colorCode,
   shapeCode,
@@ -20,6 +21,7 @@ export function VaultStage({
 }: {
   chitCode: string;
   teamName: string;
+  chitEnteredAt: string;
   payload: ParsedPayload | null;
   colorCode: string;
   shapeCode: string;
@@ -53,6 +55,7 @@ export function VaultStage({
           teamName,
           enteredVaultCode: value.trim(),
           mcqScore,
+          chitEnteredAt: chitEnteredAt || localStorage.getItem(`chitEnteredAt:${chitCode}`),
         }),
       });
       const data = await res.json();

@@ -6,7 +6,7 @@ import { StageShell } from "../StageShell";
 export function ChitStage({
   onValid,
 }: {
-  onValid: (chitCode: string, teamName: string) => void;
+  onValid: (chitCode: string, teamName: string, chitEnteredAt: string) => void;
 }) {
   const [chitValue, setChitValue] = useState("");
   const [teamValue, setTeamValue] = useState("");
@@ -43,8 +43,10 @@ export function ChitStage({
       const data = await res.json();
 
       if (data.valid) {
+        const chitEnteredAt = new Date().toISOString();
         localStorage.setItem("teamName", teamName);
-        onValid(code, teamName);
+        localStorage.setItem(`chitEnteredAt:${code}`, chitEnteredAt);
+        onValid(code, teamName, chitEnteredAt);
       } else {
         setError("That chit code wasn't recognized. Check it and try again.");
       }
