@@ -106,29 +106,68 @@ export function VaultStage({
         </div>
       </div>
 
-      <div className="vault-input-wrap" onClick={() => inputRef.current?.focus()} style={{ marginBottom: 8 }}>
-        <div className="vault-boxes">
-          {boxes.map((ch, i) => (
-            <div className={`vault-box ${ch ? "filled" : ""}`} key={i}>
-              {ch}
-            </div>
-          ))}
+      {/* Input Section */}
+      <div className="vault-input-section" style={{ marginTop: 24, marginBottom: 16 }}>
+        <label
+          htmlFor="vault-hidden-input"
+          style={{
+            display: "block",
+            fontSize: "0.85rem",
+            fontWeight: 600,
+            letterSpacing: "0.05em",
+            textTransform: "uppercase",
+            color: "rgba(255, 255, 255, 0.85)",
+            marginBottom: 10,
+            textAlign: "center",
+          }}
+        >
+          Enter the combined chitcode here
+        </label>
+
+        <div
+          className="vault-input-wrap"
+          onClick={() => inputRef.current?.focus()}
+          style={{ cursor: "pointer", marginBottom: 8 }}
+        >
+          <div className="vault-boxes">
+            {boxes.map((ch, i) => (
+              <div
+                className={`vault-box ${ch ? "filled" : ""}`}
+                key={i}
+                style={{
+                  background: ch
+                    ? "rgba(255, 255, 255, 0.22)"
+                    : "rgba(255, 255, 255, 0.08)",
+                  borderColor: ch
+                    ? "rgba(255, 255, 255, 0.7)"
+                    : "rgba(255, 255, 255, 0.3)",
+                  borderWidth: "1px",
+                  borderStyle: "solid",
+                  color: "#ffffff",
+                  transition: "all 0.15s ease",
+                }}
+              >
+                {ch}
+              </div>
+            ))}
+          </div>
+          <input
+            id="vault-hidden-input"
+            ref={inputRef}
+            className="vault-hidden-input"
+            value={value}
+            maxLength={MAX_LEN}
+            inputMode="numeric"
+            autoFocus
+            onChange={(e) => {
+              setValue(e.target.value.replace(/[^0-9]/g, ""));
+              setDenied(false);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") submit();
+            }}
+          />
         </div>
-        <input
-          ref={inputRef}
-          className="vault-hidden-input"
-          value={value}
-          maxLength={MAX_LEN}
-          inputMode="numeric"
-          autoFocus
-          onChange={(e) => {
-            setValue(e.target.value.replace(/[^0-9]/g, ""));
-            setDenied(false);
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") submit();
-          }}
-        />
       </div>
 
       {denied && (
